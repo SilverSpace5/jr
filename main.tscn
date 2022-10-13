@@ -240,8 +240,8 @@ energy = 1.5
 shadow_enabled = true
 
 [node name="Sun" type="Light2D" parent="."]
-position = Vector2( 444, 42.6435 )
-scale = Vector2( 19.644, -4.90122 )
+position = Vector2( 0, 41.836 )
+scale = Vector2( 100, -4.93097 )
 texture = ExtResource( 10 )
 energy = 1.99
 range_height = 574.7

@@ -33,6 +33,7 @@ func _ready():
 	
 	yield(get_tree().create_timer(2), "timeout")
 	while not connected:
+		print("Retrying Connection")
 		peer.disconnect_from_host()
 		peer = WebSocketClient.new()
 		peer.connect("connection_established", self, "_connected")

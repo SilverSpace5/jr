@@ -5,6 +5,8 @@ var id = ""
 var databaseData = {}
 var playing = false
 var ready = false
+var scene
+var sceneName = "Connect"
 
 func _ready():
 	var data = SaveLoad.loadData("jr-embercore-id.data")
