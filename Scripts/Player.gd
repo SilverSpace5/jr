@@ -10,6 +10,7 @@ var onFloor = false
 var floorFrames = 0
 var holdJump = false
 var jump = 0
+onready var spawn = position
 
 func _process(delta):
 	var inputX = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -55,7 +56,8 @@ func _process(delta):
 	move_and_slide(velocity, Vector2.UP)
 	
 	if position.y >= 1000:
-		position = Vector2(217, 118)
+		position = spawn
+		velocity = Vector2.ZERO
 
 func _on_FloorDetect_body_entered(body):
 	if body.name != name:
