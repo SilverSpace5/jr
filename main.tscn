@@ -189,8 +189,9 @@ format = 1
 tile_data = PoolIntArray( 458740, 0, 0, 589788, 0, 0, 720878, 0, 0, 917477, 0, 0, 1114077, 0, 0, 1179618, 0, 0, 1179632, 0, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-light_mask = 2
-position = Vector2( 217, 112 )
+modulate = Color( 0.317647, 0.317647, 0.317647, 1 )
+position = Vector2( -345, 210 )
+z_index = 1
 speed = 200
 jumpSpeed = 250
 
@@ -203,8 +204,8 @@ smoothing_speed = 7.5
 [node name="Lights" type="Node2D" parent="."]
 
 [node name="Light2D" type="Light2D" parent="Lights"]
-light_mask = 3
-position = Vector2( -374, 203 )
+light_mask = 0
+position = Vector2( -368, 204 )
 texture = ExtResource( 2 )
 energy = 1.5
 shadow_enabled = true
