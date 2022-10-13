@@ -22,7 +22,7 @@ margin_bottom = -120.0
 grow_horizontal = 2
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 1 )
-text = "Embercore"
+text = "Embercore - but awesome"
 
 [node name="Play" type="Button" parent="."]
 anchor_left = 0.5
