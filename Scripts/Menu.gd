@@ -5,4 +5,4 @@ func _on_Play_pressed():
 
 
 func _on_options_pressed():
-	get_tree().change_scene()
+	get_tree().change_scene("res://options.tscn")
