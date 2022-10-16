@@ -266,7 +266,7 @@ smoothing_enabled = true
 smoothing_speed = 7.5
 
 [node name="slime" parent="." instance=ExtResource( 11 )]
-position = Vector2( -781, -72 )
+position = Vector2( -782, -72 )
 scale = Vector2( 2, 2 )
 
 [node name="Enemy" type="Area2D" parent="slime"]
