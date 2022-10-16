@@ -66,3 +66,7 @@ func _on_FloorDetect_body_entered(body):
 func _on_FloorDetect_body_exited(body):
 	if body.name != name:
 		onFloor = false
+
+
+func _on_Enemy_body_entered(body):
+	velocity.x -= 100

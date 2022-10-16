@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/NOT THE PLAYER.png-1cbeebbeb12065f21ca6ad74354cdba8.stex"
+path="res://.import/slime.png-bf1a866d47410489cbabf782d2bb24d8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tiles/NOT THE PLAYER.png"
-dest_files=[ "res://.import/NOT THE PLAYER.png-1cbeebbeb12065f21ca6ad74354cdba8.stex" ]
+source_file="res://entitys/slime.png"
+dest_files=[ "res://.import/slime.png-bf1a866d47410489cbabf782d2bb24d8.stex" ]
 
 [params]
 
