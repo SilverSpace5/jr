@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/NOT THE PLAYER.png-2a2a60765f555a05d167d7e88a6ee240.stex"
+path="res://.import/shoulder.png-d606d7a172a8c14910738403a8e7e177.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://entitys/NOT THE PLAYER.png"
-dest_files=[ "res://.import/NOT THE PLAYER.png-2a2a60765f555a05d167d7e88a6ee240.stex" ]
+source_file="res://entitys/pictures/player/shoulder.png"
+dest_files=[ "res://.import/shoulder.png-d606d7a172a8c14910738403a8e7e177.stex" ]
 
 [params]
 
