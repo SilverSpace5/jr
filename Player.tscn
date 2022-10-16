@@ -32,6 +32,8 @@ position = Vector2( 3, 17.0938 )
 shape = SubResource( 2 )
 
 [node name="EnemyDetect" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetect"]
 modulate = Color( 1, 0, 1, 1 )
@@ -40,3 +42,4 @@ shape = SubResource( 3 )
 
 [connection signal="body_entered" from="FloorDetect" to="." method="_on_FloorDetect_body_entered"]
 [connection signal="body_exited" from="FloorDetect" to="." method="_on_FloorDetect_body_exited"]
+[connection signal="body_entered" from="EnemyDetect" to="." method="_on_EnemyDetect_body_entered"]

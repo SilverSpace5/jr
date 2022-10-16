@@ -269,11 +269,7 @@ smoothing_speed = 7.5
 position = Vector2( -782, -72 )
 scale = Vector2( 2, 2 )
 
-[node name="Enemy" type="Area2D" parent="slime"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="slime/Enemy"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="slime"]
 modulate = Color( 1, 0, 1, 1 )
 position = Vector2( 0, -0.5 )
 shape = SubResource( 12 )
-
-[connection signal="body_entered" from="slime/Enemy" to="Player" method="_on_Enemy_body_entered"]
