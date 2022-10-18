@@ -25,6 +25,8 @@ func _process(delta):
 	else:
 		if not data.has("position"):
 			return
+			
+		$Username.text = data["username"]
 		
 		var pos = Global.getVector(data["position"])
 		velocity = Global.getVector(data["velocity"])
@@ -36,6 +38,7 @@ func _process(delta):
 			move_and_slide(velocity)
 
 func tick(delta):
+	$Username.text = Network.databaseData["username"]
 	var inputX = Input.get_action_strength("right") - Input.get_action_strength("left")
 	velocity.y += gravity
 	
@@ -98,3 +101,4 @@ func _on_tick_rate_timeout():
 	if name == Network.id:
 		Network.data["position"] = global_position
 		Network.data["velocity"] = velocity
+		Network.data["username"] = $Username.text

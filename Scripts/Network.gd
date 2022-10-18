@@ -65,7 +65,7 @@ func sendMsg(data, wait=false):
 		
 
 func updateDatabaseData(id):
-	sendMsg({"databaseset": data, "databaseid": id})
+	sendMsg({"databaseset": databaseData, "databaseid": id})
 
 func getDatabaseData(id):
 	return yield(sendMsg({"databaseget": id}, true), "completed")
