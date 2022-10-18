@@ -175,7 +175,7 @@ func _process(delta):
 		sendMsg({"data": data, "id": id})
 		admin = Global.id in admins
 	clearReceivedTimer += delta
-	if clearReceivedTimer >= 0.5:
+	if clearReceivedTimer >= 1:
 		clearReceivedTimer = 0
 		if Global.ready:
 			if JSON.print(databaseData) != JSON.print(lastData):
