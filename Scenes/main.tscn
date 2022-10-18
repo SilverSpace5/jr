@@ -1,6 +1,5 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=22 format=2]
 
-[ext_resource path="res://entitys/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://light.jpeg" type="Texture" id=2]
 [ext_resource path="res://tiles/grass.png" type="Texture" id=3]
 [ext_resource path="res://tiles/dirt.png" type="Texture" id=4]
@@ -10,8 +9,8 @@
 [ext_resource path="res://tiles/sun_piece.png" type="Texture" id=8]
 [ext_resource path="res://tiles/torch.png" type="Texture" id=9]
 [ext_resource path="res://skylight.png" type="Texture" id=10]
-[ext_resource path="res://entitys/green_slime.tscn" type="PackedScene" id=11]
-[ext_resource path="res://main.gd" type="Script" id=12]
+[ext_resource path="res://entities/green_slime.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Scripts/main.gd" type="Script" id=12]
 [ext_resource path="res://Blue_jumper.tscn" type="PackedScene" id=13]
 
 [sub_resource type="CubeMesh" id=11]
@@ -166,6 +165,7 @@ polygon = PoolVector2Array( 11.1303, 7.09712, 3.99715, 7.09712, 3.99715, 1.30984
 
 [node name="main" type="Node2D"]
 script = ExtResource( 12 )
+spawn = Vector2( -3, 0 )
 
 [node name="sky" type="MeshInstance2D" parent="."]
 modulate = Color( 0.129412, 0.254902, 0.266667, 1 )
@@ -252,6 +252,10 @@ energy = 1.99
 range_height = 574.7
 shadow_enabled = true
 
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 0.7, 0.7 )
+
 [node name="entitys" type="Node" parent="."]
 
 [node name="hostile" type="Node" parent="entitys"]
@@ -266,20 +270,3 @@ position = Vector2( -495, 109 )
 scale = Vector2( 5, 5 )
 
 [node name="passive" type="Node" parent="entitys"]
-
-[node name="YOU" type="Node" parent="entitys"]
-
-[node name="Player" parent="entitys/YOU" instance=ExtResource( 1 )]
-modulate = Color( 0.384314, 0.384314, 0.384314, 1 )
-show_behind_parent = false
-position = Vector2( -3, 0 )
-z_index = 1
-speed = 200
-jumpSpeed = 250
-
-[node name="Camera2D" type="Camera2D" parent="entitys/YOU/Player"]
-position = Vector2( 3, 0 )
-current = true
-zoom = Vector2( 0.7, 0.7 )
-smoothing_enabled = true
-smoothing_speed = 7.5

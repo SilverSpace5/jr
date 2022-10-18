@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://title_backdrop.tscn" type="PackedScene" id=1]
-[ext_resource path="res://options.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/options.gd" type="Script" id=2]
 [ext_resource path="res://default.tres" type="DynamicFont" id=3]
 
 [node name="options" type="Control"]

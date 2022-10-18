@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="JR"
-run/main_scene="res://Connect.tscn"
+run/main_scene="res://Scenes/Connect.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -19,6 +19,13 @@ config/icon="res://icon.png"
 Global="*res://Scripts/Global.gd"
 Network="*res://Scripts/Network.gd"
 SaveLoad="*res://Scripts/SaveLoad.gd"
+Console="*res://Console.tscn"
+Players="*res://Players.tscn"
+
+[display]
+
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
 
 [gui]
 
@@ -64,6 +71,16 @@ zoom_in={
 zoom_out={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":45,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+chat={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":84,"unicode":0,"echo":false,"script":null)
+ ]
+}
+send={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":16777221,"unicode":0,"echo":false,"script":null)
  ]
 }
 

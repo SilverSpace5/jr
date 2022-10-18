@@ -10,10 +10,32 @@ var onFloor = false
 var floorFrames = 0
 var holdJump = false
 var jump = 0
+var data = {}
 onready var spawn = position
 onready var caves = position
 
+onready var tween = $Tween
+
 func _process(delta):
+	if Network.playerData.has(name):
+		data = Network.playerData[name]
+	
+	if name == Network.id:
+		tick(delta)
+	else:
+		if not data.has("position"):
+			return
+		
+		var pos = Global.getVector(data["position"])
+		velocity = Global.getVector(data["velocity"])
+		
+		if pos != position:
+			tween.interpolate_property(self, "global_position", global_position, pos, 0.1)
+			tween.start()
+		if not tween.is_active():
+			move_and_slide(velocity)
+
+func tick(delta):
 	var inputX = Input.get_action_strength("right") - Input.get_action_strength("left")
 	velocity.y += gravity
 	
@@ -69,6 +91,10 @@ func _on_FloorDetect_body_exited(body):
 	if body.name != name:
 		onFloor = false
 
-
 func _on_EnemyDetect_body_entered(body):
 	velocity.x -= 100
+
+func _on_tick_rate_timeout():
+	if name == Network.id:
+		Network.data["position"] = global_position
+		Network.data["velocity"] = velocity

@@ -1,31 +1,48 @@
 extends Node
 
+"""
+Server Code:
+https://replit.com/join/azfqmiywou-silverspace505
+"""
+
 var websocket_url = "wss://Embercore-Server.silverspace505.repl.co"
-var player = load("res://Player.tscn")
+var player = load("res://entities/Player.tscn")
 var playerData = {}
 var data = {}
 var databaseData = {}
-var lastData = databaseData.duplicate(true)
+var lastData = {}
 var connected = false
 var returnData = {}
 var received = []
 var lastReceived = []
 var clearReceivedTimer = 0
 var gotData = false
+var auto = false
+var admins = []
+var admin = false
 
 var peer = WebSocketClient.new()
 var id = ""
 
+func connectToServer():
+	peer.disconnect_from_host()
+	peer = WebSocketClient.new()
+	peer.connect("connection_established", self, "_connected")
+	peer.connect("connection_error", self, "_closed")
+	peer.connect("connection_closed", self, "_closed")
+	peer.connect("data_received", self, "_on_data")
+	var err = peer.connect_to_url(websocket_url)
+	if err != OK:
+		print("Unable to connect")
+		set_process(false)
+
 func _ready():
-	for i in range(6):
-		randomize()
-		id += str(round(rand_range(0, 9)))
+	id = Global.getId(10)
 	
 	peer.connect("connection_established", self, "_connected")
 	peer.connect("connection_error", self, "_closed")
 	peer.connect("connection_closed", self, "_closed")
 	peer.connect("data_received", self, "_on_data")
-
 	var err = peer.connect_to_url(websocket_url)
 	if err != OK:
 		print("Unable to connect")
@@ -33,17 +50,8 @@ func _ready():
 	
 	yield(get_tree().create_timer(2), "timeout")
 	while not connected:
-		print("Retrying Connection")
-		peer.disconnect_from_host()
-		peer = WebSocketClient.new()
-		peer.connect("connection_established", self, "_connected")
-		peer.connect("connection_error", self, "_closed")
-		peer.connect("connection_closed", self, "_closed")
-		peer.connect("data_received", self, "_on_data")
-		err = peer.connect_to_url(websocket_url)
-		if err != OK:
-			print("Unable to connect")
-			set_process(false)
+		print("Retrying")
+		connectToServer()
 		yield(get_tree().create_timer(2), "timeout")
 
 func sendMsg(data, wait=false):
@@ -74,14 +82,28 @@ func _player_connected(id):
 
 func _player_disconnected(id):
 	print("Player Left: " + id)
+	playerLeaveGame(id)
 	playerData.erase(id)
 
 func _closed(was_clean = false):
-	print("disconnected: " + str(was_clean))
+	var lastScene = Global.sceneName
+	Console.log2("Disconnected")
+	#print("disconnected: " + str(was_clean))
 	connected = false
 	Global.ready = false
-	get_tree().change_scene("res://Disconnected.tscn")
-	set_process(false)
+	Global.changeScene("Disconnected")
+	for node in Players.get_children():
+		node.queue_free()
+	
+	if auto and not was_clean:
+		while not connected:
+			print("Retrying")
+			connectToServer()
+			yield(get_tree().create_timer(2), "timeout")
+		if lastScene == "Game":
+			sendMsg({"joinGame": id})
+		Global.changeScene(lastScene)
+		Global.ready = true
 
 func _connected(proto):
 	print("Connected")
@@ -90,6 +112,18 @@ func _connected(proto):
 	#print("Connected with protocol: ", proto)
 	#peer.get_peer(1).put_packet(JSON.print({"join": id, "password": "weroweinafoien"}).to_utf8())
 	#Global.player = instance_player(id)
+
+func playerJoinGame(id):
+	if Global.playTime > 0.5:
+		Console.log2(playerData[id]["username"] + " Joined!")
+	if Global.sceneName == "main":
+		instance_player(id)
+
+func playerLeaveGame(id):
+	if Global.sceneName == "main":
+		Console.log2(playerData[id]["username"] + " Left :(")
+	if Players.has_node(str(id)):
+		Players.get_node(str(id)).queue_free()
 
 func _on_data():
 	var data = JSON.parse(peer.get_peer(1).get_packet().get_string_from_utf8()).result
@@ -113,6 +147,10 @@ func _on_data():
 			_player_connected(data["connected"])
 		if data.has("disconnected"):
 			_player_disconnected(data["disconnected"])
+		if data.has("joingame"):
+			playerJoinGame(data["joingame"])
+		if data.has("leavegame"):
+			playerLeaveGame(data["leavegame"])
 		if data.has("players"):
 			for player in data["players"]:
 				if player != id:
@@ -125,20 +163,24 @@ func _on_data():
 		if data.has("databaselist"):
 			gotData = true
 			returnData = data["databaselist"]
+		if data.has("send") and Global.sceneName == "main":
+			Console.log2(data["send"])
 	
 
 func _process(delta):
 	peer.poll()
-	if connected:
-		if JSON.print(databaseData) != JSON.print(lastData):
-			updateDatabaseData(Global.id)
-			lastData = databaseData.duplicate(true)
+	if Global.ready:
+		data["scene"] = Global.sceneName
 		playerData[id] = data
 		sendMsg({"data": data, "id": id})
+		admin = Global.id in admins
 	clearReceivedTimer += delta
-	if clearReceivedTimer >= 1:
+	if clearReceivedTimer >= 0.5:
 		clearReceivedTimer = 0
-		
+		if Global.ready:
+			if JSON.print(databaseData) != JSON.print(lastData):
+				updateDatabaseData(Global.id)
+				lastData = databaseData.duplicate(true)
 		var i = 0
 		for data2 in received:
 			var dataJSON = JSON.print(data2)
@@ -154,3 +196,8 @@ func _process(delta):
 
 func _exit_tree():
 	peer.disconnect_from_host()
+
+func instance_player(id, pos=Vector2(0, 0)) -> Object:
+	var player_instance = Global.instance_node_at_location(player, Players, pos)
+	player_instance.name = str(id)
+	return player_instance

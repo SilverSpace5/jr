@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/NOT THE PLAYER.png-865fd2841e10539890ecf1259906da6e.stex"
+path="res://.import/chest.png-fb79ad79c797e9f938c839dee3881a4f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://entitys/pictures/NOT THE PLAYER.png"
-dest_files=[ "res://.import/NOT THE PLAYER.png-865fd2841e10539890ecf1259906da6e.stex" ]
+source_file="res://entities/pictures/player/chest.png"
+dest_files=[ "res://.import/chest.png-fb79ad79c797e9f938c839dee3881a4f.stex" ]
 
 [params]
 
