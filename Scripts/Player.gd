@@ -35,7 +35,10 @@ func _process(delta):
 		var pos = Global.getVector(data["position"])
 		velocity = Global.getVector(data["velocity"])
 		
-		$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
+		if data["animation"] != "Idle":
+			$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
+		else:
+			$Visual/Player/AnimationPlayer.playback_speed = 0.5
 		
 		if abs(velocity.x) > 0.2:
 			if velocity.x > 0:
@@ -43,20 +46,32 @@ func _process(delta):
 			else:
 				$Visual.scale.x = -1
 		
+		if data["arms"]:
+			var mousePos = Global.getVector(data["arms"])
+			$Visual/Player/Skeleton2D/Body/LeftArm.look_at(mousePos)
+			$Visual/Player/Skeleton2D/Body/RightArm.look_at(mousePos)
+			if abs(velocity.x) < 0.2:
+				if mousePos.x < position.x:
+					$Visual.scale.x = -1
+				else:	
+					$Visual.scale.x = 1
+		
 		if pos != position:
 			tween.interpolate_property(self, "global_position", global_position, pos, 0.1)
+#			if Global.fasterNetwork:
+#				#print(pos)
+#				#print("--> " + str(pos+velocity*delta/2))
+#				tween.interpolate_property(self, "global_position", global_position, pos+velocity*delta*2, 0.05)
+#			else:
 			tween.start()
 		if not tween.is_active():
+			velocity.y += gravity
+#			if Global.fasterNetwork:
+				
 			move_and_slide(velocity)
 
 func tick(delta):
 	var canMove = not Console.focus and not Global.scene.menu
-	
-	var leftArm = $Visual/Player/LeftArm/Skeleton2D/Bone2D/Bone2D2/LeftArm
-	$Visual/Player/LeftArm/Skeleton2D/Bone2D/Bone2D2.remove_child(leftArm)
-	leftArm.position = get_global_mouse_position()
-	$Visual/Player/LeftArm/Skeleton2D/Bone2D/Bone2D2.add_child(leftArm)
-	#print(get_global_mouse_position())
 	
 	$Username.text = Network.databaseData["username"]
 	var inputX = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -111,7 +126,7 @@ func tick(delta):
 	move_and_slide(velocity, Vector2.UP)
 	
 	if abs(velocity.x) > 0.2:
-		#$Visual/Player/AnimationPlayer.play("run")
+		$Visual/Player/AnimationPlayer.play("run")
 		lastAnim = "run"
 		$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
 		#print(velocity.x/200)
@@ -120,12 +135,22 @@ func tick(delta):
 		else:
 			$Visual.scale.x = -1
 	else:
-		#$Visual/Player/AnimationPlayer.play("Idle")
+		$Visual/Player/AnimationPlayer.playback_speed = 0.5
+		$Visual/Player/AnimationPlayer.play("Idle")
 		lastAnim = "Idle"
 	
 	if not onFloor and not is_on_floor():
-		#$Visual/Player/AnimationPlayer.play("Jump")
+		$Visual/Player/AnimationPlayer.play("Jump")
 		lastAnim = "Jump"
+	
+	if Input.is_action_pressed("arms"):
+		$Visual/Player/Skeleton2D/Body/LeftArm.look_at(get_global_mouse_position())
+		$Visual/Player/Skeleton2D/Body/RightArm.look_at(get_global_mouse_position())
+		if abs(velocity.x) < 0.2:
+			if get_global_mouse_position().x < position.x:
+				$Visual.scale.x = -1
+			else:
+				$Visual.scale.x = 1
 	
 	if position.y >= 5000:
 		position = spawn
@@ -151,3 +176,7 @@ func _on_tick_rate_timeout():
 		Network.data["velocity"] = velocity
 		Network.data["username"] = $Username.text
 		Network.data["animation"] = lastAnim
+		if Input.is_action_pressed("arms"):
+			Network.data["arms"] = get_global_mouse_position()
+		else:
+			Network.data["arms"] = false

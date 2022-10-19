@@ -8,6 +8,7 @@ var ready = false
 var scene
 var sceneName = "Connect"
 var playTime = 0 
+var fasterNetwork = false
 
 var letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -18,6 +19,11 @@ var defaultDatabase = {
 }
 
 func _process(delta):
+	if Input.is_action_just_pressed("fasterNetwork"):
+		if fasterNetwork:
+			fasterNetwork = false
+		else:
+			fasterNetwork = true
 	if sceneName == "main":
 		playTime += delta
 		Network.data["playing"] = true
