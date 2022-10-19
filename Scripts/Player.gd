@@ -114,7 +114,7 @@ func tick(delta):
 		$Visual/Player/AnimationPlayer.play("Idle")
 		lastAnim = "Idle"
 	
-	if not onFloor:
+	if not onFloor and not is_on_floor():
 		$Visual/Player/AnimationPlayer.play("Jump")
 		lastAnim = "Jump"
 	
@@ -132,7 +132,9 @@ func _on_FloorDetect_body_exited(body):
 		onFloor = false
 
 func _on_EnemyDetect_body_entered(body):
-	velocity.x -= 100
+	if "slime" in body.name or "Blue_jumper" in body.name:
+		velocity.x = -2000*$Visual.scale.x
+		velocity.y = -250
 
 func _on_tick_rate_timeout():
 	if name == Network.id:
