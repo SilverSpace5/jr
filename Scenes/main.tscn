@@ -285,6 +285,7 @@ scale = Vector2( 2, 2 )
 current = true
 
 [node name="Node2D" type="Node2D" parent="Camera2D"]
+z_index = 1
 
 [node name="Dark" type="Sprite" parent="Camera2D/Node2D"]
 position = Vector2( 4.49998, 4.49998 )
@@ -299,7 +300,6 @@ margin_right = -416.0
 margin_bottom = -254.0
 custom_fonts/font = SubResource( 12 )
 text = "menu"
-icon_align = 1
 
 [node name="options" type="Button" parent="Camera2D/Node2D"]
 light_mask = 2

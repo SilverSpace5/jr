@@ -28,7 +28,7 @@ length = 0.8
 loop = true
 
 [node name="Player" type="KinematicBody2D"]
-z_index = 1
+z_index = 2
 script = ExtResource( 2 )
 jumpSpeed = 250
 gravity = 35

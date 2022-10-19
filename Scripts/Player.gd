@@ -50,6 +50,14 @@ func _process(delta):
 			move_and_slide(velocity)
 
 func tick(delta):
+	var canMove = not Console.focus and not Global.scene.menu
+	
+	var leftArm = $Visual/Player/LeftArm/Skeleton2D/Bone2D/Bone2D2/LeftArm
+	$Visual/Player/LeftArm/Skeleton2D/Bone2D/Bone2D2.remove_child(leftArm)
+	leftArm.position = get_global_mouse_position()
+	$Visual/Player/LeftArm/Skeleton2D/Bone2D/Bone2D2.add_child(leftArm)
+	#print(get_global_mouse_position())
+	
 	$Username.text = Network.databaseData["username"]
 	var inputX = Input.get_action_strength("right") - Input.get_action_strength("left")
 	velocity.y += gravity
@@ -69,9 +77,9 @@ func tick(delta):
 		jump = 0
 		holdJump = true
 	if is_on_ceiling():
-		velocity	.y = gravity
+		velocity.y = gravity
 	
-	if (Input.is_action_just_pressed("jump") or (Input.is_action_pressed("jump") and jump > 0)) and (floorFrames <= 3 or (jump <= 8 and holdJump)):
+	if canMove and (Input.is_action_just_pressed("jump") or (Input.is_action_pressed("jump") and jump > 0)) and (floorFrames <= 3 or (jump <= 8 and holdJump)):
 		var jump2 = jumpSpeed + (jumpSpeed*0.1*jump)
 		velocity.y = -jump2
 		jump += 1
@@ -81,11 +89,12 @@ func tick(delta):
 	else:
 		velocity.x *= 0.8
 		speed /= 3
-	velocity.x += inputX * speed
+	if canMove:
+		velocity.x += inputX * speed
 	if not is_on_floor():
 		speed *= 3
 	
-	if Input. is_action_pressed("ADMIN_MODE"):
+	if Input.is_action_pressed("ADMIN_MODE") and canMove:
 		if Input. is_action_pressed("fast"):
 			speed += 10
 		if Input. is_action_pressed("slow"):
@@ -102,7 +111,7 @@ func tick(delta):
 	move_and_slide(velocity, Vector2.UP)
 	
 	if abs(velocity.x) > 0.2:
-		$Visual/Player/AnimationPlayer.play("run")
+		#$Visual/Player/AnimationPlayer.play("run")
 		lastAnim = "run"
 		$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
 		#print(velocity.x/200)
@@ -111,11 +120,11 @@ func tick(delta):
 		else:
 			$Visual.scale.x = -1
 	else:
-		$Visual/Player/AnimationPlayer.play("Idle")
+		#$Visual/Player/AnimationPlayer.play("Idle")
 		lastAnim = "Idle"
 	
 	if not onFloor and not is_on_floor():
-		$Visual/Player/AnimationPlayer.play("Jump")
+		#$Visual/Player/AnimationPlayer.play("Jump")
 		lastAnim = "Jump"
 	
 	if position.y >= 5000:

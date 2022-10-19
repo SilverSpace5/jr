@@ -23,10 +23,20 @@ func _process(delta):
 	
 	var controls = ""
 	if Global.sceneName == "main":
-		if not focus:
-			controls += " (T) Open Chat"
+		if not Global.scene.menu:
+			if not focus:
+				controls += " (T) Open Chat"
+			elif not Global.scene.menu:
+				controls += " (ESC) Close Chat"
 		else:
-			controls += " (ESC) Close Chat"
+			focus = false
+		
+		if not focus:
+			if Global.scene.menu:
+				focus = false
+				controls += " (ESC) Close Menu"
+			else:
+				controls += " (ESC) Open Menu"
 	$Controls/Label.text = controls
 	
 	if not focus:

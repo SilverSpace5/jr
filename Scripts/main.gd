@@ -3,6 +3,7 @@ extends Node2D
 export (Vector2) var spawn = Vector2(0, 0)
 export (float) var zoom = 0.7
 var menu = false
+var consoleWait = 0
 
 func _ready():
 	Global.player = Network.instance_player(Network.id, spawn)
@@ -25,15 +26,23 @@ func _process(delta):
 	zoom = clamp(zoom, 0.1, 1.5)
 	$Camera2D.zoom = Vector2(zoom, zoom)
 	$Camera2D/Node2D.scale = $Camera2D.zoom
-	if Input. is_action_just_pressed("in_game_menu"):
+	consoleWait -= delta
+	if Console.focus:
+		consoleWait = 0.1
+	if Input. is_action_just_pressed("in_game_menu") and consoleWait <= 0:
 		if menu == false:
 			menu = true
 		else:
 			menu = false
 
 func _on_menu_pressed():
-	get_tree().change_scene("res://Scenes/Menu.tscn")
-
+	Global.changeScene("Menu")
+	for child in Players.get_children():
+		child.queue_free()
+	Network.sendMsg({"leavegame": Network.id})
 
 func _on_options_pressed():
-	get_tree().change_scene("res://Scenes/options_in_game.tscn")
+	Global.changeScene("options_in_game")
+	for child in Players.get_children():
+		child.queue_free()
+	Network.sendMsg({"leavegame": Network.id})
