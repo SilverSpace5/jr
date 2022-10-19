@@ -114,7 +114,7 @@ func tick(delta):
 		$Visual/Player/AnimationPlayer.play("Idle")
 		lastAnim = "Idle"
 	
-	if not onFloor:
+	if not onFloor and not is_on_floor():
 		$Visual/Player/AnimationPlayer.play("Jump")
 		lastAnim = "Jump"
 	
