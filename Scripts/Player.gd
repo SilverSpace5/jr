@@ -11,6 +11,7 @@ var floorFrames = 0
 var holdJump = false
 var jump = 0
 var data = {}
+var lastAnim = "Idle"
 onready var spawn = position
 onready var caves = position
 
@@ -19,8 +20,6 @@ onready var tween = $Tween
 func _process(delta):
 	if Network.playerData.has(name):
 		data = Network.playerData[name]
-	$CollisionShape2D.disabled = false
-	var gravity = 50
 	
 	if name == Network.id:
 		tick(delta)
@@ -29,9 +28,18 @@ func _process(delta):
 			return
 			
 		$Username.text = data["username"]
+		$Visual/Player/AnimationPlayer.play(data["animation"])
 		
 		var pos = Global.getVector(data["position"])
 		velocity = Global.getVector(data["velocity"])
+		
+		$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
+		
+		if abs(velocity.x) > 0.2:
+			if velocity.x > 0:
+				$Visual.scale.x = 1
+			else:
+				$Visual.scale.x = -1
 		
 		if pos != position:
 			tween.interpolate_property(self, "global_position", global_position, pos, 0.1)
@@ -59,7 +67,7 @@ func tick(delta):
 		jump = 0
 		holdJump = true
 	if is_on_ceiling():
-		velocity.y = gravity
+		velocity	.y = gravity
 	
 	if (Input.is_action_just_pressed("jump") or (Input.is_action_pressed("jump") and jump > 0)) and (floorFrames <= 3 or (jump <= 8 and holdJump)):
 		var jump2 = jumpSpeed + (jumpSpeed*0.1*jump)
@@ -76,14 +84,29 @@ func tick(delta):
 		speed *= 3
 	
 	if Input. is_action_pressed("ADMIN_MODE"):
-		$CollisionShape2D.disabled = true
 		if Input. is_action_pressed("weeee"):
 			gravity = -5
 		if Input.is_action_pressed("oh no"):
 			gravity = 40
-			
 	
 	move_and_slide(velocity, Vector2.UP)
+	
+	if abs(velocity.x) > 0.2:
+		$Visual/Player/AnimationPlayer.play("run")
+		lastAnim = "run"
+		$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
+		#print(velocity.x/200)
+		if velocity.x > 0:
+			$Visual.scale.x = 1
+		else:
+			$Visual.scale.x = -1
+	else:
+		$Visual/Player/AnimationPlayer.play("Idle")
+		lastAnim = "Idle"
+	
+	if not onFloor:
+		$Visual/Player/AnimationPlayer.play("Jump")
+		lastAnim = "Jump"
 	
 	if position.y >= 5000:
 		position = spawn
@@ -106,3 +129,4 @@ func _on_tick_rate_timeout():
 		Network.data["position"] = global_position
 		Network.data["velocity"] = velocity
 		Network.data["username"] = $Username.text
+		Network.data["animation"] = lastAnim

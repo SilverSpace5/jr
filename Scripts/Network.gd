@@ -20,6 +20,7 @@ var gotData = false
 var auto = false
 var admins = []
 var admin = false
+var reconnect = false
 
 var peer = WebSocketClient.new()
 var id = ""
@@ -96,6 +97,7 @@ func _closed(was_clean = false):
 		node.queue_free()
 	
 	if auto and not was_clean:
+		reconnect = true
 		while not connected:
 			print("Retrying")
 			connectToServer()
@@ -104,7 +106,9 @@ func _closed(was_clean = false):
 			sendMsg({"joinGame": id})
 		Global.changeScene(lastScene)
 		Global.ready = true
-
+	else:
+		reconnect = false
+		
 func _connected(proto):
 	print("Connected")
 	connected = true
@@ -142,6 +146,17 @@ func _on_data():
 		if data["secure"]:
 			received.append(data)
 			sendMsg({"received": data})
+			
+		if data.has("settings"):
+			var data2 = data["settings"]
+			if data2["version"] > Global.version:
+				Global.changeScene("Reload")
+			if data2["maintenance"]:
+				Global.changeScene("Maintenance")
+			elif Global.sceneName == "Maintenance":
+				Global.changeScene("Menu")
+			auto = data2["auto"]
+			admins = data2["admins"]
 		
 		if data.has("connected"):
 			_player_connected(data["connected"])
