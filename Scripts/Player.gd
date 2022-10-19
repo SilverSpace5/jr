@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 # Edit these in the editor
-export var speed = 50
+export var speed = 200
 export var jumpSpeed = 500
 export var gravity = 50
 
@@ -20,7 +20,9 @@ onready var tween = $Tween
 func _process(delta):
 	if Network.playerData.has(name):
 		data = Network.playerData[name]
-	
+	if Input. is_action_just_released("ADMIN_MODE"):
+		$CollisionShape2D.disabled = false
+		speed = 200
 	if name == Network.id:
 		tick(delta)
 	else:
@@ -84,6 +86,14 @@ func tick(delta):
 		speed *= 3
 	
 	if Input. is_action_pressed("ADMIN_MODE"):
+		if Input. is_action_pressed("fast"):
+			speed += 10
+		if Input. is_action_pressed("slow"):
+			speed -= 10
+		if Input.is_action_pressed("no_clip"):
+			$CollisionShape2D.disabled = true
+		if Input. is_action_pressed("now_clip"):
+			$CollisionShape2D.disabled = false
 		if Input. is_action_pressed("weeee"):
 			gravity = -5
 		if Input.is_action_pressed("oh no"):
