@@ -45,10 +45,10 @@ func _on_options_pressed():
 	Network.sendMsg({"leavegame": Network.id})
 
 #          music
-func _on_Area2D_body_entered(body):
-	if Global.player.name == body.name:
-		$peaceful_town.playing = true
-
-func _on_Area2D_body_exited(body):
-	if Global.player.name == body.name:
-		$peaceful_town.playing = false
+#func _on_Area2D_body_entered(body):
+#	if Global.player.name == body.name:
+#		$peaceful_town.playing = true
+#
+#func _on_Area2D_body_exited(body):
+#	if Global.player.name == body.name:
+#		$peaceful_town.playing = false
