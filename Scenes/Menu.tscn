@@ -58,6 +58,11 @@ layer = -1
 [node name="title_backdrop" parent="CanvasLayer" instance=ExtResource( 3 )]
 
 [node name="menu_theme" type="AudioStreamPlayer2D" parent="."]
+<<<<<<< HEAD
+position = Vector2( 513, 325 )
+=======
+position = Vector2( 512, 300 )
+>>>>>>> a9c09b7187b0cb7454b7d3a134d530f728143263
 stream = ExtResource( 4 )
 volume_db = 4.496
 autoplay = true
