@@ -1,5 +1,5 @@
 extends Node2D
-
+#lmao
 export (Vector2) var spawn = Vector2(0, 0)
 export (float) var zoom = 0.7
 var menu = false
