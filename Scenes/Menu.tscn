@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://default.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Scripts/Menu.gd" type="Script" id=2]
 [ext_resource path="res://title_backdrop.tscn" type="PackedScene" id=3]
+[ext_resource path="res://music and sound/menu.mp3" type="AudioStream" id=4]
 
 [node name="Menu" type="Control"]
 anchor_right = 1.0
@@ -52,6 +53,10 @@ margin_right = 172.0
 margin_bottom = 116.0
 custom_fonts/font = ExtResource( 1 )
 text = "Options"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+autoplay = true
 
 [connection signal="pressed" from="Buttons/Play" to="." method="_on_Play_pressed"]
 [connection signal="pressed" from="Buttons/Options" to="." method="_on_Options_pressed"]
