@@ -60,6 +60,7 @@ layer = -1
 [node name="menu_theme" type="AudioStreamPlayer2D" parent="."]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 position = Vector2( 513, 325 )
 =======
 position = Vector2( 512, 300 )
@@ -67,6 +68,8 @@ position = Vector2( 512, 300 )
 =======
 position = Vector2( 512, 300 )
 >>>>>>> a9c09b7187b0cb7454b7d3a134d530f728143263
+=======
+>>>>>>> parent of a9c09b7 (e)
 stream = ExtResource( 4 )
 volume_db = 4.496
 autoplay = true
