@@ -13,12 +13,25 @@ var jump = 0
 var data = {}
 var lastAnim = "Idle"
 var arms = [false, false]
+var itemR = 0
+var itemL = 0
 onready var spawn = position
 onready var caves = position
 
 onready var tween = $Tween
 
 func _process(delta):
+	
+	if Input.is_action_just_pressed("1"):
+		itemR += 1
+		if itemR >= 2:
+			itemR = 0
+	
+	if Input.is_action_just_pressed("2"):
+		itemL += 1
+		if itemL >= 2:
+			itemL = 0
+	
 	if Network.playerData.has(name):
 		data = Network.playerData[name]
 	if Input. is_action_just_released("ADMIN_MODE"):
@@ -46,6 +59,9 @@ func _process(delta):
 				$Visual.scale.x = 1
 			else:
 				$Visual.scale.x = -1
+		
+		$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = data["items"][0] == 1
+		$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = data["items"][1] == 1
 		
 		if true in data["arms"][0]:
 			var mousePos = Global.getVector(data["arms"][1])
@@ -156,6 +172,9 @@ func tick(delta):
 	if Input.is_action_pressed("leftClick"):
 		arms[1] = true
 	
+	$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = itemR == 1
+	$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = itemL == 1
+	
 	if arms[0]:
 		$Visual/Player/Skeleton2D/Body/LeftArm.look_at(get_global_mouse_position())
 	if arms[1]:
@@ -192,3 +211,4 @@ func _on_tick_rate_timeout():
 		Network.data["username"] = $Username.text
 		Network.data["animation"] = lastAnim
 		Network.data["arms"] = [arms, get_global_mouse_position()]
+		Network.data["items"] = [itemR, itemL]
