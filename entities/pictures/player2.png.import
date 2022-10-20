@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/shoulder.png-4c49720f2b72e6efc7b4cac37a6b2f4f.stex"
+path="res://.import/player2.png-7b83edb86f54262804fee8a9e6d20f0f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://entities/pictures/player/shoulder.png"
-dest_files=[ "res://.import/shoulder.png-4c49720f2b72e6efc7b4cac37a6b2f4f.stex" ]
+source_file="res://entities/pictures/player2.png"
+dest_files=[ "res://.import/player2.png-7b83edb86f54262804fee8a9e6d20f0f.stex" ]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
 flags/filter=false
-flags/mipmaps=false
+flags/mipmaps=true
 flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true

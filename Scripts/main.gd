@@ -4,8 +4,15 @@ export (Vector2) var spawn = Vector2(0, 0)
 export (float) var zoom = 0.7
 var menu = false
 var consoleWait = 0
+var lightNode = load("res://light.tscn")
 
 func _ready():
+	
+	for tilePos in $"background(but_not)".get_used_cells():
+		var lightNode2 = lightNode.instance()
+		$Lights.add_child(lightNode2)
+		lightNode2.position = tilePos*32+Vector2(16, 16)
+	
 	$Camera2D/Scale/Menu.visible = true
 	Global.player = Network.instance_player(Network.id, spawn)
 	$Camera2D.position = spawn
