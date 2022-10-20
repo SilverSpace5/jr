@@ -284,15 +284,18 @@ scale = Vector2( 2, 2 )
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 
-[node name="Node2D" type="Node2D" parent="Camera2D"]
+[node name="Scale" type="Node2D" parent="Camera2D"]
+
+[node name="Menu" type="Node2D" parent="Camera2D/Scale"]
+visible = false
 z_index = 1
 
-[node name="Dark" type="Sprite" parent="Camera2D/Node2D"]
+[node name="Dark" type="Sprite" parent="Camera2D/Scale/Menu"]
 position = Vector2( 4.49998, 4.49998 )
 scale = Vector2( 33.2812, 19.8437 )
 texture = ExtResource( 14 )
 
-[node name="menu" type="Button" parent="Camera2D/Node2D"]
+[node name="menu" type="Button" parent="Camera2D/Scale/Menu"]
 light_mask = 2
 margin_left = -506.0
 margin_top = -294.0
@@ -301,7 +304,7 @@ margin_bottom = -254.0
 custom_fonts/font = SubResource( 12 )
 text = "menu"
 
-[node name="options" type="Button" parent="Camera2D/Node2D"]
+[node name="options" type="Button" parent="Camera2D/Scale/Menu"]
 light_mask = 2
 margin_left = -506.0
 margin_top = -248.0
@@ -310,5 +313,7 @@ margin_bottom = -208.0
 custom_fonts/font = SubResource( 13 )
 text = "Options"
 
-[connection signal="pressed" from="Camera2D/Node2D/menu" to="." method="_on_menu_pressed"]
-[connection signal="pressed" from="Camera2D/Node2D/options" to="." method="_on_options_pressed"]
+[node name="UI" type="Node2D" parent="Camera2D/Scale"]
+
+[connection signal="pressed" from="Camera2D/Scale/Menu/menu" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="Camera2D/Scale/Menu/options" to="." method="_on_options_pressed"]
