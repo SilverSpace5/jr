@@ -52,6 +52,8 @@ func _ready():
 		Network.updateDatabaseData(id)
 		SaveLoad.saveData("embercore-id3.data", {"id": id})
 	
+	print(id)
+	
 	Console.log2("Getting database data...")
 	var list = yield(Network.getDatabase(), "completed")
 	Network.databaseData = yield(Network.getDatabaseData(id), "completed")
