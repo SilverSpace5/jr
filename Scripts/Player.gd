@@ -75,7 +75,7 @@ func tick(delta):
 	
 	$Username.text = Network.databaseData["username"]
 	var inputX = Input.get_action_strength("right") - Input.get_action_strength("left")
-	velocity.y += gravity
+	velocity.y += gravity * delta
 	
 	$FloorDetect.update()
 	
@@ -100,9 +100,9 @@ func tick(delta):
 		jump += 48 * delta
 	
 	if is_on_floor():
-		velocity.x *= 0.33
+		velocity.x *= 0.33 
 	else:
-		velocity.x *= 0.8
+		velocity.x *= 0.8 
 		speed /= 3
 	if canMove:
 		velocity.x += inputX * speed

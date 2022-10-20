@@ -28,10 +28,11 @@ length = 0.8
 loop = true
 
 [node name="Player" type="KinematicBody2D"]
+rotation = 0.00129725
 z_index = 2
 script = ExtResource( 2 )
 jumpSpeed = 275
-gravity = 35
+gravity = 1850
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 0.7975 )
