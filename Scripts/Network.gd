@@ -119,15 +119,24 @@ func _connected(proto):
 
 func playerJoinGame(id):
 	if Global.playTime > 0.5:
-		Console.log2(playerData[id]["username"] + " Joined!")
+		if playerData.has(id):
+			Console.log2(playerData[id]["username"] + " Joined!")
 	if Global.sceneName == "main":
+		if playerData.has(id):
+			Global.scene.get_node("Camera2D/Scale/Menu/Players").add_item(playerData[id]["username"], null, false)
 		instance_player(id)
 
 func playerLeaveGame(id):
 	if Global.sceneName == "main":
-		Console.log2(playerData[id]["username"] + " Left :(")
+		if playerData.has(id):
+			Console.log2(playerData[id]["username"] + " Left :(")
 	if Players.has_node(str(id)):
 		Players.get_node(str(id)).queue_free()
+		if playerData.has(id):
+			for i in range(Global.scene.get_node("Camera2D/Scale/Menu/Players").get_item_count()):
+				var item = Global.scene.get_node("Camera2D/Scale/Menu/Players").get_item_text(i)
+				if item == playerData[id]["username"]:
+					Global.scene.get_node("Camera2D/Scale/Menu/Players").remove_item(i)
 
 func _on_data():
 	var data = JSON.parse(peer.get_peer(1).get_packet().get_string_from_utf8()).result

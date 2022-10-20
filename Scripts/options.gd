@@ -1,7 +1,7 @@
 extends Control
 
 func _on_back_pressed():
-	if name == "options_in_game":
+	if Global.sceneName == "options_in_game":
 		Network.sendMsg({"joingame": Network.id})
 		Global.changeScene("main")
 	else:
@@ -9,6 +9,7 @@ func _on_back_pressed():
 	
 func _ready():
 	$Username.text = Network.databaseData["username"]
+	$Id.text = Global.id
 
 func _process(delta):
 	Network.databaseData["username"] = $Username.text

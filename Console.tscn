@@ -40,6 +40,7 @@ margin_right = 269.0
 margin_bottom = 70.0
 custom_fonts/font = SubResource( 2 )
 max_length = 25
+caret_blink = true
 
 [node name="Controls" type="VBoxContainer" parent="."]
 anchor_left = 1.0

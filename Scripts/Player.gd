@@ -12,6 +12,7 @@ var holdJump = false
 var jump = 0
 var data = {}
 var lastAnim = "Idle"
+var arms = [false, false]
 onready var spawn = position
 onready var caves = position
 
@@ -46,15 +47,19 @@ func _process(delta):
 			else:
 				$Visual.scale.x = -1
 		
-		if data["arms"]:
-			var mousePos = Global.getVector(data["arms"])
-			$Visual/Player/Skeleton2D/Body/LeftArm.look_at(mousePos)
-			$Visual/Player/Skeleton2D/Body/RightArm.look_at(mousePos)
-			if abs(velocity.x) < 0.2:
-				if mousePos.x < position.x:
-					$Visual.scale.x = -1
-				else:	
-					$Visual.scale.x = 1
+		if true in data["arms"][0]:
+			var mousePos = Global.getVector(data["arms"][1])
+			arms = data["arms"][0]
+			if arms[0]:
+				$Visual/Player/Skeleton2D/Body/LeftArm.look_at(mousePos)
+			if arms[1]:
+				$Visual/Player/Skeleton2D/Body/RightArm.look_at(mousePos)
+			if arms == [true, true]:
+				if abs(velocity.x) < 0.2:
+					if mousePos.x < position.x:
+						$Visual.scale.x = -1
+					else:	
+						$Visual.scale.x = 1
 		
 		if pos != position:
 			tween.interpolate_property(self, "global_position", global_position, pos, 0.1)
@@ -142,10 +147,20 @@ func tick(delta):
 	if not onFloor and not is_on_floor():
 		$Visual/Player/AnimationPlayer.play("Jump")
 		lastAnim = "Jump"
-	
+		
+	arms = [false, false]
 	if Input.is_action_pressed("arms"):
+		arms = [true, true]
+	if Input.is_action_pressed("rightClick"):
+		arms[0] = true
+	if Input.is_action_pressed("leftClick"):
+		arms[1] = true
+	
+	if arms[0]:
 		$Visual/Player/Skeleton2D/Body/LeftArm.look_at(get_global_mouse_position())
+	if arms[1]:
 		$Visual/Player/Skeleton2D/Body/RightArm.look_at(get_global_mouse_position())
+	if arms == [true, true]:
 		if abs(velocity.x) < 0.2:
 			if get_global_mouse_position().x < position.x:
 				$Visual.scale.x = -1
@@ -176,7 +191,4 @@ func _on_tick_rate_timeout():
 		Network.data["velocity"] = velocity
 		Network.data["username"] = $Username.text
 		Network.data["animation"] = lastAnim
-		if Input.is_action_pressed("arms"):
-			Network.data["arms"] = get_global_mouse_position()
-		else:
-			Network.data["arms"] = false
+		Network.data["arms"] = [arms, get_global_mouse_position()]

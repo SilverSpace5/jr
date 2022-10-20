@@ -7,7 +7,7 @@ var consoleWait = 0
 var lightNode = load("res://light.tscn")
 
 func _ready():
-	
+	$Camera2D/Scale/Menu/Players.add_item(Network.databaseData["username"], null, false)
 	for tilePos in $"background(but_not)".get_used_cells():
 		var lightNode2 = lightNode.instance()
 		$Lights.add_child(lightNode2)
