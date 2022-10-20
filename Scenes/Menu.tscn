@@ -1,78 +1,57 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://default.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Scripts/Menu.gd" type="Script" id=2]
 [ext_resource path="res://title_backdrop.tscn" type="PackedScene" id=3]
-[ext_resource path="res://music and sound/menu.mp3" type="AudioStream" id=4]
 
 [node name="Menu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_pivot_offset = Vector2( -741, -281 )
 script = ExtResource( 2 )
 
 [node name="Title" type="Label" parent="."]
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -122.0
-margin_top = -142.0
-margin_right = 143.0
-margin_bottom = 14.0
+margin_left = -120.0
+margin_top = 103.0
+margin_right = 120.0
+margin_bottom = 153.0
 grow_horizontal = 2
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 1 )
-text = "Embercore 
-DEMO 
-"
+text = "Embercore"
 align = 1
-
-[node name="Play" type="Button" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -48.5
-margin_top = -28.0
-margin_right = 48.5
-margin_bottom = 28.0
-custom_fonts/font = ExtResource( 1 )
-text = "Play"
-
-[node name="options" type="Button" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -84.0
-margin_top = 34.0
-margin_right = 88.0
-margin_bottom = 90.0
-custom_fonts/font = ExtResource( 1 )
-text = "Options"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -1
 
 [node name="title_backdrop" parent="CanvasLayer" instance=ExtResource( 3 )]
 
-[node name="menu_theme" type="AudioStreamPlayer2D" parent="."]
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-position = Vector2( 513, 325 )
-=======
-position = Vector2( 512, 300 )
->>>>>>> a9c09b7187b0cb7454b7d3a134d530f728143263
-=======
-position = Vector2( 512, 300 )
->>>>>>> a9c09b7187b0cb7454b7d3a134d530f728143263
-=======
->>>>>>> parent of a9c09b7 (e)
-stream = ExtResource( 4 )
-volume_db = 4.496
-autoplay = true
+[node name="Buttons" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
-[connection signal="pressed" from="Play" to="." method="_on_Play_pressed"]
-[connection signal="pressed" from="options" to="." method="_on_options_pressed"]
+[node name="Play" type="Button" parent="Buttons"]
+margin_right = 172.0
+margin_bottom = 56.0
+custom_fonts/font = ExtResource( 1 )
+text = "Play"
+
+[node name="Options" type="Button" parent="Buttons"]
+margin_top = 60.0
+margin_right = 172.0
+margin_bottom = 116.0
+custom_fonts/font = ExtResource( 1 )
+text = "Options"
+
+[connection signal="pressed" from="Buttons/Play" to="." method="_on_Play_pressed"]
+[connection signal="pressed" from="Buttons/Options" to="." method="_on_Options_pressed"]

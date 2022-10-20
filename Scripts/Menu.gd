@@ -4,5 +4,5 @@ func _on_Play_pressed():
 	Network.sendMsg({"joingame": Network.id})
 	Global.changeScene("main")
 
-func _on_options_pressed():
+func _on_Options_pressed():
 	Global.changeScene("options")
