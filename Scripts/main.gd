@@ -46,7 +46,9 @@ func _on_options_pressed():
 
 #          music
 func _on_Area2D_body_entered(body):
-	$peaceful_town.playing = true
+	if body.name == body.name:
+		$peaceful_town.playing = true
 
 func _on_Area2D_body_exited(body):
-	$peaceful_town.playing = false
+	if body.name == body.name:
+		$peaceful_town.playing = false
