@@ -21,6 +21,7 @@ Network="*res://Scripts/Network.gd"
 SaveLoad="*res://Scripts/SaveLoad.gd"
 Console="*res://Console.tscn"
 Players="*res://Players.tscn"
+MenuTheme="*res://menu_theme.tscn"
 
 [display]
 
