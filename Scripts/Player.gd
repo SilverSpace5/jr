@@ -97,7 +97,7 @@ func tick(delta):
 	if canMove and (Input.is_action_just_pressed("jump") or (Input.is_action_pressed("jump") and jump > 0)) and (floorFrames <= 3 or (jump <= 8 and holdJump)):
 		var jump2 = jumpSpeed + (jumpSpeed*0.1*jump)
 		velocity.y = -jump2
-		jump += 1
+		jump += 48 * delta
 	
 	if is_on_floor():
 		velocity.x *= 0.33

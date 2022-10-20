@@ -30,7 +30,7 @@ loop = true
 [node name="Player" type="KinematicBody2D"]
 z_index = 2
 script = ExtResource( 2 )
-jumpSpeed = 250
+jumpSpeed = 275
 gravity = 35
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
