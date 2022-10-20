@@ -43,3 +43,10 @@ func _on_options_pressed():
 	for child in Players.get_children():
 		child.queue_free()
 	Network.sendMsg({"leavegame": Network.id})
+
+#          music
+func _on_Area2D_body_entered(body):
+	$peaceful_town.playing = true
+
+func _on_Area2D_body_exited(body):
+	$peaceful_town.playing = false
