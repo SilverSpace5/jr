@@ -14,6 +14,7 @@ func _physics_process(delta):
 	if animateTimer >= 0.25:
 		animateTimer = 0
 		if $BlueJumperSpriteSheet.frame == 2:
+			
 			$BlueJumperSpriteSheet.frame = 0
 		else:
 			$BlueJumperSpriteSheet.frame += 1

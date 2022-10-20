@@ -11,7 +11,6 @@ var floorFrames = 0
 var holdJump = false
 var jump = 0
 var data = {}
-var jumped = false
 var lastAnim = "Idle"
 onready var spawn = position
 onready var caves = position
@@ -82,18 +81,16 @@ func tick(delta):
 	
 	if not Input.is_action_pressed("jump"):
 		holdJump = false
-		jumped = false
 		
-	if onFloor and not jumped:
+	if onFloor:
 		floorFrames = 0
 	else:
 		floorFrames += 1
 	
 	if is_on_floor():
 		velocity.y = 0
-		if not jumped:
-			jump = 0
-			holdJump = true
+		jump = 0
+		holdJump = true
 	if is_on_ceiling():
 		velocity.y = gravity * delta
 	
@@ -101,7 +98,6 @@ func tick(delta):
 		var jump2 = jumpSpeed + (jumpSpeed*0.1*jump)
 		velocity.y = -jump2
 		jump += 48 * delta
-		jumped = true
 	
 	if is_on_floor():
 		velocity.x *= 0.33 
