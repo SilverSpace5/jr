@@ -92,7 +92,7 @@ func tick(delta):
 		jump = 0
 		holdJump = true
 	if is_on_ceiling():
-		velocity.y = gravity
+		velocity.y = gravity * delta
 	
 	if canMove and (Input.is_action_just_pressed("jump") or (Input.is_action_pressed("jump") and jump > 0)) and (floorFrames <= 3 or (jump <= 8 and holdJump)):
 		var jump2 = jumpSpeed + (jumpSpeed*0.1*jump)
@@ -119,9 +119,9 @@ func tick(delta):
 		if Input. is_action_pressed("now_clip"):
 			$CollisionShape2D.disabled = false
 		if Input. is_action_pressed("weeee"):
-			gravity = -5
+			gravity = -231
 		if Input.is_action_pressed("oh no"):
-			gravity = 40
+			gravity = 1850
 	
 	move_and_slide(velocity, Vector2.UP)
 	

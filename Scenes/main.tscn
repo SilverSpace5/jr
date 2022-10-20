@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://homespun.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://light.jpeg" type="Texture" id=2]
@@ -14,7 +14,6 @@
 [ext_resource path="res://Scripts/main.gd" type="Script" id=12]
 [ext_resource path="res://entities/Blue_jumper.tscn" type="PackedScene" id=13]
 [ext_resource path="res://dark.png" type="Texture" id=14]
-[ext_resource path="res://music and sound/town.mp3" type="AudioStream" id=15]
 
 [sub_resource type="CubeMesh" id=11]
 
@@ -178,16 +177,12 @@ outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
 
-[sub_resource type="RectangleShape2D" id=14]
-extents = Vector2( 588.5, 41.5081 )
-
 [node name="main" type="Node2D"]
 script = ExtResource( 12 )
 spawn = Vector2( -3, 0 )
 
 [node name="sky" type="MeshInstance2D" parent="."]
 modulate = Color( 0.129412, 0.254902, 0.266667, 1 )
-position = Vector2( -45, 125 )
 scale = Vector2( 999999, 999999 )
 z_index = -100
 mesh = SubResource( 11 )
@@ -320,20 +315,5 @@ text = "Options"
 
 [node name="UI" type="Node2D" parent="Camera2D/Scale"]
 
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( -447, 1760 )
-scale = Vector2( 1, 7 )
-shape = SubResource( 14 )
-
-[node name="peaceful_town" type="AudioStreamPlayer2D" parent="."]
-position = Vector2( -447, 1760 )
-stream = ExtResource( 15 )
-volume_db = 1.0
-max_distance = 650.0
-
 [connection signal="pressed" from="Camera2D/Scale/Menu/menu" to="." method="_on_menu_pressed"]
 [connection signal="pressed" from="Camera2D/Scale/Menu/options" to="." method="_on_options_pressed"]
-[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
-[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
