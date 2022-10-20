@@ -14,7 +14,7 @@
 [ext_resource path="res://Scripts/main.gd" type="Script" id=12]
 [ext_resource path="res://entities/Blue_jumper.tscn" type="PackedScene" id=13]
 [ext_resource path="res://dark.png" type="Texture" id=14]
-[ext_resource path="res://music and sound/town.mp3" type="AudioStream" id=15]
+[ext_resource path="res://music and sound/music/town.mp3" type="AudioStream" id=15]
 
 [sub_resource type="CubeMesh" id=11]
 
@@ -320,7 +320,7 @@ text = "Options"
 position = Vector2( -416, 1789 )
 stream = ExtResource( 15 )
 autoplay = true
-max_distance = 1401.0
+max_distance = 861.0
 
 [connection signal="pressed" from="Camera2D/Scale/Menu/menu" to="." method="_on_menu_pressed"]
 [connection signal="pressed" from="Camera2D/Scale/Menu/options" to="." method="_on_options_pressed"]
