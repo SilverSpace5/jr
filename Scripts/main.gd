@@ -7,6 +7,7 @@ var consoleWait = 0
 var lightNode = load("res://light.tscn")
 
 func _ready():
+	$peaceful_town.attenuation = 1 + 100*(1-Network.databaseData["volume"]/100)
 	$Camera2D/Scale/Menu/Players.add_item(Network.databaseData["username"], null, false)
 	for tilePos in $"background(but_not)".get_used_cells():
 		var lightNode2 = lightNode.instance()

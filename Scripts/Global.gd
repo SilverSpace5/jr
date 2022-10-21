@@ -15,7 +15,8 @@ var letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var version = 0
 
 var defaultDatabase = {
-	"username": "Unnamed"
+	"username": "Unnamed",
+	"volume": 100
 }
 
 func _process(delta):
