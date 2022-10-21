@@ -15,6 +15,8 @@ var lastAnim = "Idle"
 var arms = [false, false]
 var itemR = 0
 var itemL = 0
+var RCooldown = 0
+var LCooldown = 0
 
 var items = ["sword", "stick", "bow", "shield"]
 
@@ -25,12 +27,18 @@ onready var tween = $Tween
 
 func used(item, pos=global_position, rotation2=0):
 	if item == "bow":
-		rotation2 += 45
+#		var rotation3 = rotation2
+#		if $Visual.scale.x == 1:
+#			rotation3 -= 45
+#		else:
+#			rotation3 += 45
 		var proj = load("res://Projectile.tscn").instance()
 		Global.scene.add_child(proj)
 		proj.global_position = pos
 		proj.rotation_degrees = rotation2
-		proj.velocity = Vector2(500, 500).rotated(deg2rad(rotation2))
+		proj.despawn = 1
+		proj.item = load("res://Projectiles/arrow.png")
+		proj.velocity = Vector2(500, 500).rotated(deg2rad(rotation2-45))
 
 func _process(delta):
 	
@@ -84,7 +92,7 @@ func _process(delta):
 				$Visual/Player/Skeleton2D/Body/LeftArm.look_at(mousePos)
 			if arms[1]:
 				$Visual/Player/Skeleton2D/Body/RightArm.look_at(mousePos)
-			if arms == [true, true]:
+			if true in arms:
 				if abs(velocity.x) < 0.2:
 					if mousePos.x < position.x:
 						$Visual.scale.x = -1
@@ -195,7 +203,7 @@ func tick(delta):
 		$Visual/Player/Skeleton2D/Body/LeftArm.look_at(get_global_mouse_position())
 	if arms[1]:
 		$Visual/Player/Skeleton2D/Body/RightArm.look_at(get_global_mouse_position())
-	if arms == [true, true]:
+	if true in arms:
 		if abs(velocity.x) < 0.2:
 			if get_global_mouse_position().x < position.x:
 				$Visual.scale.x = -1
@@ -206,18 +214,23 @@ func tick(delta):
 		position = spawn
 		velocity = Vector2.ZERO
 	
-	if Input.is_action_just_pressed("leftClick"):
-		used(items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.rotation_degrees)
-	if Input.is_action_just_pressed("rightClick"):
-		used(items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.rotation_degrees)
-	
+	RCooldown -= delta
+	LCooldown -= delta
+	if Input.is_action_just_pressed("leftClick") or Input.is_action_just_pressed("arms") and RCooldown <= 0:
+		RCooldown = 0.35
+		used(items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees)
+		Network.sendMsg({"broadcast": ["use", [Network.id, items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees], false]})
+	if Input.is_action_just_pressed("rightClick") or Input.is_action_just_pressed("arms") and LCooldown <= 0:
+		LCooldown = 0.35
+		used(items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees)
+		Network.sendMsg({"broadcast": ["use", [Network.id, items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees], false]})
 
 func _on_FloorDetect_body_entered(body):
-	if body.name != name:
+	if body.name != name and body.name != "Projectile":
 		onFloor = true
 
 func _on_FloorDetect_body_exited(body):
-	if body.name != name:
+	if body.name != name and body.name != "Projectile":
 		onFloor = false
 
 func _on_EnemyDetect_body_entered(body):

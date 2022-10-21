@@ -5,13 +5,13 @@
 [ext_resource path="res://PlayerSprite.tscn" type="PackedScene" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 3.49935, 15.2081 )
+extents = Vector2( 4.5, 15.2081 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 3.47859, 0.953125 )
+extents = Vector2( 4.5227, 0.953125 )
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 4.5, 15.2081 )
+extents = Vector2( 5.5, 15.2081 )
 
 [node name="Player" type="KinematicBody2D"]
 rotation = 0.00129725
@@ -23,7 +23,7 @@ jumpSpeed = 275
 gravity = 1850
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0.501945, 0.998666 )
+position = Vector2( 0.501297, 0.998666 )
 scale = Vector2( 1, 0.973 )
 shape = SubResource( 1 )
 

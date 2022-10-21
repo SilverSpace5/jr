@@ -189,6 +189,9 @@ func _on_data():
 			returnData = data["databaselist"]
 		if data.has("send") and Global.sceneName == "main":
 			Console.log2(data["send"])
+		if data.has("use") and Global.sceneName == "main":
+			if Players.has_node(data["use"][0]):
+				Players.get_node(data["use"][0]).used(data["use"][1], Global.getVector(data["use"][2]), data["use"][3])
 	
 
 func _process(delta):
