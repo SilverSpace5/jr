@@ -216,11 +216,11 @@ func tick(delta):
 	
 	RCooldown -= delta
 	LCooldown -= delta
-	if Input.is_action_just_pressed("leftClick") or Input.is_action_just_pressed("arms") and RCooldown <= 0:
+	if Input.is_action_pressed("leftClick") or Input.is_action_just_pressed("arms") and RCooldown <= 0:
 		RCooldown = 0.35
 		used(items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees)
 		Network.sendMsg({"broadcast": ["use", [Network.id, items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees], false]})
-	if Input.is_action_just_pressed("rightClick") or Input.is_action_just_pressed("arms") and LCooldown <= 0:
+	if Input.is_action_pressed("rightClick") or Input.is_action_just_pressed("arms") and LCooldown <= 0:
 		LCooldown = 0.35
 		used(items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees)
 		Network.sendMsg({"broadcast": ["use", [Network.id, items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees], false]})
