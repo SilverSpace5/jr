@@ -15,21 +15,33 @@ var lastAnim = "Idle"
 var arms = [false, false]
 var itemR = 0
 var itemL = 0
+
+var items = ["sword", "stick", "bow", "shield"]
+
 onready var spawn = position
 onready var caves = position
 
 onready var tween = $Tween
 
+func used(item, pos=global_position, rotation2=0):
+	if item == "bow":
+		rotation2 += 45
+		var proj = load("res://Projectile.tscn").instance()
+		Global.scene.add_child(proj)
+		proj.global_position = pos
+		proj.rotation_degrees = rotation2
+		proj.velocity = Vector2(500, 500).rotated(deg2rad(rotation2))
+
 func _process(delta):
 	
 	if Input.is_action_just_pressed("1"):
 		itemR += 1
-		if itemR >= 2:
+		if itemR > len(items):
 			itemR = 0
 	
 	if Input.is_action_just_pressed("2"):
 		itemL += 1
-		if itemL >= 2:
+		if itemL > len(items):
 			itemL = 0
 	
 	if Network.playerData.has(name):
@@ -60,8 +72,10 @@ func _process(delta):
 			else:
 				$Visual.scale.x = -1
 		
-		$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = data["items"][0] == 1
-		$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = data["items"][1] == 1
+		$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Items/" + items[data["items"][0]-1] + ".png")
+		$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Items/" + items[data["items"][1]-1] + ".png")
+		$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = data["items"][0] != 0
+		$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = data["items"][1] != 0
 		
 		if true in data["arms"][0]:
 			var mousePos = Global.getVector(data["arms"][1])
@@ -172,8 +186,10 @@ func tick(delta):
 	if Input.is_action_pressed("leftClick"):
 		arms[1] = true
 	
-	$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = itemR == 1
-	$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = itemL == 1
+	$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Items/" + items[itemR-1] + ".png")
+	$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Items/" + items[itemL-1] + ".png")
+	$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = itemR != 0
+	$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = itemL != 0
 	
 	if arms[0]:
 		$Visual/Player/Skeleton2D/Body/LeftArm.look_at(get_global_mouse_position())
@@ -189,6 +205,11 @@ func tick(delta):
 	if position.y >= 5000:
 		position = spawn
 		velocity = Vector2.ZERO
+	
+	if Input.is_action_just_pressed("leftClick"):
+		used(items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.rotation_degrees)
+	if Input.is_action_just_pressed("rightClick"):
+		used(items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.rotation_degrees)
 	
 
 func _on_FloorDetect_body_entered(body):

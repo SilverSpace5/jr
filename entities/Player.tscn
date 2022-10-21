@@ -16,6 +16,8 @@ extents = Vector2( 4.5, 15.2081 )
 [node name="Player" type="KinematicBody2D"]
 rotation = 0.00129725
 z_index = 2
+collision_layer = 2
+collision_mask = 2
 script = ExtResource( 2 )
 jumpSpeed = 275
 gravity = 1850
