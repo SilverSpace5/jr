@@ -60,3 +60,19 @@ func _on_options_pressed():
 #func _on_Area2D_body_exited(body):
 #	if Global.player.name == body.name:
 #		$peaceful_town.playing = false
+
+
+func _on_pvp_onoff_pressed():
+	var tick_on_off = 0
+	if tick_on_off == 0:
+		if $Camera2D/Scale/Menu/Tick.visible == false:
+			$Camera2D/Scale/Menu/Tick.visible = true
+			tick_on_off += 1
+	if tick_on_off == 1:
+		if $Camera2D/Scale/Menu/Tick.visible == true:
+			$Camera2D/Scale/Menu/Tick.visible = false
+			tick_on_off -= 1
+
+
+func _on_mute_pressed():
+	$peaceful_town.autoplay
