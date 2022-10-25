@@ -1,16 +1,10 @@
 extends AudioStreamPlayer2D
 
-var last_scene_name = Global.sceneName
-
 func _process(delta):
-	
 	if Global.ready:
-		volume_db = 10 * (Network.databaseData["volume"]/100)
-	
-	if last_scene_name != Global.sceneName:
-		last_scene_name = Global.sceneName
-		if Global.sceneName == "main" or Global.sceneName == "Connect":
-			playing = false
+		volume_db = 60 * (Server.dbData["volume"]/100) - 50
+		if Global.sceneName == "main":
+			stop()
 		elif not playing:
-			playing = true
+			play(1.75)
 		

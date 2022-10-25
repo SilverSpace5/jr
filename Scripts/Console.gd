@@ -7,7 +7,7 @@ var targetAlpha = 0
 var targetAlpha2 = 0
 var lastUsername = ""
 
-func log2(value):
+remote func log2(value):
 	if updated < 1:
 		updated = 1
 	updated += len(value) / 7.5
@@ -17,9 +17,9 @@ func log2(value):
 
 func _process(delta):
 	if Global.ready:
-		if lastUsername != Network.databaseData["username"]:
-			lastUsername = Network.databaseData["username"]
-			$VBoxContainer/LineEdit.max_length = 37-len(Network.databaseData["username"])
+		if lastUsername != Server.dbData["username"]:
+			lastUsername = Server.dbData["username"]
+			$VBoxContainer/LineEdit.max_length = 37-len(Server.dbData["username"])
 	
 	var controls = ""
 	if Global.sceneName == "main":
@@ -53,8 +53,8 @@ func _process(delta):
 	
 	if focus:
 		if Input.is_action_just_pressed("send") and Global.ready:
-			log2("[" + Network.databaseData["username"] + "] " + $VBoxContainer/LineEdit.text)
-			Network.sendMsg({"broadcast": ["send", "[" + Network.databaseData["username"] + "] " + $VBoxContainer/LineEdit.text]})
+			log2("[" + Server.dbData["username"] + "] " + $VBoxContainer/LineEdit.text)
+			rpc("log2", "[" + Server.dbData["username"] + "] " + $VBoxContainer/LineEdit.text)
 			$VBoxContainer/LineEdit.text = ""
 			focus = false
 	else:

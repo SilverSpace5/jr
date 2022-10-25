@@ -7,15 +7,18 @@ var consoleWait = 0
 var lightNode = load("res://light.tscn")
 
 func _ready():
-	$peaceful_town.attenuation = 1 + 100*(1-Network.databaseData["volume"]/100)
-	$Camera2D/Scale/Menu/Players.add_item(Network.databaseData["username"], null, false)
+	$peaceful_town.play(1.75)
+	$AudioStreamPlayer2D.play(1.75)
+	$peaceful_town.volume_db = Server.dbData["volume"]/2 - 50
+	$AudioStreamPlayer2D.volume_db = Server.dbData["volume"]/2 - 50
+	$Camera2D/Scale/Menu/Players.add_item(Server.dbData["username"], null, false)
 	for tilePos in $"background(but_not)".get_used_cells():
 		var lightNode2 = lightNode.instance()
 		$Lights.add_child(lightNode2)
 		lightNode2.position = tilePos*32+Vector2(16, 16)
 	
 	$Camera2D/Scale/Menu.visible = true
-	Global.player = Network.instance_player(Network.id, spawn)
+	Global.player = Server.instance_player(get_tree().get_network_unique_id(), spawn)
 	$Camera2D.position = spawn
 
 func _process(delta):
@@ -44,13 +47,13 @@ func _on_menu_pressed():
 	Global.changeScene("Menu")
 	for child in Players.get_children():
 		child.queue_free()
-	Network.sendMsg({"leavegame": Network.id})
+	Server.rpc("leaveGame", get_tree().get_network_unique_id())
 
 func _on_options_pressed():
 	Global.changeScene("options_in_game")
 	for child in Players.get_children():
 		child.queue_free()
-	Network.sendMsg({"leavegame": Network.id})
+	Server.rpc("leaveGame", get_tree().get_network_unique_id())
 
 #          music
 #func _on_Area2D_body_entered(body):

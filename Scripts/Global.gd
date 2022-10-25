@@ -2,13 +2,13 @@ extends Node
 
 var player
 var id = ""
-var databaseData = {}
+var dbData = {}
 var playing = false
 var ready = false
 var scene
-var sceneName = "Connect"
+var sceneName = "Menu"
 var playTime = 0 
-var fasterNetwork = false
+var fasterServer = false
 
 var letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
@@ -16,23 +16,18 @@ var version = 0
 
 var defaultDatabase = {
 	"username": "Unnamed",
-	"volume": 100
+	"volume": 83
 }
 
 func _process(delta):
-	if Input.is_action_just_pressed("fasterNetwork"):
-		if fasterNetwork:
-			fasterNetwork = false
-		else:
-			fasterNetwork = true
 	if sceneName == "main":
 		playTime += delta
-		Network.data["playing"] = true
+		Server.data["playing"] = true
 	else:
 		playTime = 0
-		Network.data["playing"] = false
+		Server.data["playing"] = false
 	if ready:
-		Network.data["username"] = Network.databaseData["username"]
+		Server.data["username"] = Server.dbData["username"]
 	scene = get_tree().get_root().get_node(sceneName)
 
 func changeScene(newScene):
@@ -41,31 +36,36 @@ func changeScene(newScene):
 
 func _ready():
 	Console.log2("Connecting...")
-	while not Network.connected:
+	while not Server.connected:
 		yield(get_tree().create_timer(0.1), "timeout")
-		
-	var data = SaveLoad.loadData("embercore-id3.data")
+	
+	var list = yield(Server.listData(), "completed")
+	#print(list)
+	var data = SaveLoad.loadData("embercore-id4.data")
 	if data.has("id"):
 		id = data["id"]
+		if not id in list:
+			Server.dbData = defaultDatabase.duplicate(true)
+			Server.setData(id, Server.dbData)
+			SaveLoad.saveData("embercore-id4.data", {"id": id})
 	else:
 		id = getId(10)
-		Network.databaseData = defaultDatabase.duplicate(true)
-		Network.updateDatabaseData(id)
-		SaveLoad.saveData("embercore-id3.data", {"id": id})
+		Server.dbData = defaultDatabase.duplicate(true)
+		Server.setData(id, Server.dbData)
+		SaveLoad.saveData("embercore-id4.data", {"id": id})
 	
 	print(id)
 	
 	Console.log2("Getting database data...")
-	var list = yield(Network.getDatabase(), "completed")
-	Network.databaseData = yield(Network.getDatabaseData(id), "completed")
-	for key in Network.databaseData:
+	Server.dbData = yield(Server.fetchData(id), "completed")
+	for key in Server.dbData:
 		if not key in defaultDatabase.keys():
-			Network.databaseData.erase(key)
+			Server.dbData.erase(key)
 	
 	for key in defaultDatabase:
-		if not key in Network.databaseData.keys():
-			Network.databaseData[key] = defaultDatabase[key]
-	print("Got data: " + str(Network.databaseData))
+		if not key in Server.dbData.keys():
+			Server.dbData[key] = defaultDatabase[key]
+	print("Got data: " + str(Server.dbData))
 	Console.log2("Done")
 	
 	ready = true

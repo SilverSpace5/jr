@@ -6,6 +6,4 @@
 [node name="menu_theme" type="AudioStreamPlayer2D"]
 position = Vector2( 514, 299 )
 stream = ExtResource( 1 )
-volume_db = 10.0
-autoplay = true
 script = ExtResource( 2 )

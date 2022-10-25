@@ -17,15 +17,23 @@ var itemR = 0
 var itemL = 0
 var RCooldown = 0
 var LCooldown = 0
+var mousePos = Vector2(0, 0)
 
 var items = ["sword", "stick", "bow", "shield"]
+
+puppet var nPosition = Vector2(0, 0)
+puppet var nVelocity = Vector2(0, 0)
+puppet var nUsername = "Unnamed"
+puppet var nAnimation = "Idle"
+puppet var nArms = [[false, false], Vector2(0, 0)]
+puppet var nItems = [0, 0]
 
 onready var spawn = position
 onready var caves = position
 
 onready var tween = $Tween
 
-func used(item, pos=global_position, rotation2=0):
+puppet func used(item, pos=global_position, rotation2=0, id=0):
 	if item == "bow":
 #		var rotation3 = rotation2
 #		if $Visual.scale.x == 1:
@@ -36,40 +44,22 @@ func used(item, pos=global_position, rotation2=0):
 		Global.scene.add_child(proj)
 		proj.global_position = pos
 		proj.rotation_degrees = rotation2
-		proj.despawn = 1
+		proj.despawn = 2
+		proj.id = id
 		proj.item = load("res://Projectiles/arrow.png")
 		proj.velocity = Vector2(500, 500).rotated(deg2rad(rotation2-45))
 
 func _process(delta):
-	
-	if Input.is_action_just_pressed("1"):
-		itemR += 1
-		if itemR > len(items):
-			itemR = 0
-	
-	if Input.is_action_just_pressed("2"):
-		itemL += 1
-		if itemL > len(items):
-			itemL = 0
-	
-	if Network.playerData.has(name):
-		data = Network.playerData[name]
-	if Input. is_action_just_released("ADMIN_MODE"):
-		$CollisionShape2D.disabled = false
-		speed = 200
-	if name == Network.id:
+	if is_network_master():
 		tick(delta)
 	else:
-		if not data.has("position"):
-			return
 			
-		$Username.text = data["username"]
-		$Visual/Player/AnimationPlayer.play(data["animation"])
+		$Username.text = nUsername
+		$Visual/Player/AnimationPlayer.play(nAnimation)
 		
-		var pos = Global.getVector(data["position"])
-		velocity = Global.getVector(data["velocity"])
+		velocity = nVelocity
 		
-		if data["animation"] != "Idle":
+		if nAnimation != "Idle":
 			$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
 		else:
 			$Visual/Player/AnimationPlayer.playback_speed = 0.5
@@ -80,14 +70,14 @@ func _process(delta):
 			else:
 				$Visual.scale.x = -1
 		
-		$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Items/" + items[data["items"][0]-1] + ".png")
-		$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Items/" + items[data["items"][1]-1] + ".png")
-		$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = data["items"][0] != 0
-		$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = data["items"][1] != 0
+		$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Items/" + items[nItems[0]-1] + ".png")
+		$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Items/" + items[nItems[1]-1] + ".png")
+		$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = nItems[0] != 0
+		$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = nItems[1] != 0
 		
-		if true in data["arms"][0]:
-			var mousePos = Global.getVector(data["arms"][1])
-			arms = data["arms"][0]
+		if true in nArms[0]:
+			mousePos = nArms[1]
+			arms = nArms[0]
 			if arms[0]:
 				$Visual/Player/Skeleton2D/Body/LeftArm.look_at(mousePos)
 			if arms[1]:
@@ -96,27 +86,33 @@ func _process(delta):
 				if abs(velocity.x) < 0.2:
 					if mousePos.x < position.x:
 						$Visual.scale.x = -1
-					else:	
+					else:
 						$Visual.scale.x = 1
 		
-		if pos != position:
-			tween.interpolate_property(self, "global_position", global_position, pos, 0.1)
-#			if Global.fasterNetwork:
-#				#print(pos)
-#				#print("--> " + str(pos+velocity*delta/2))
-#				tween.interpolate_property(self, "global_position", global_position, pos+velocity*delta*2, 0.05)
-#			else:
+		if nPosition != position:
+			tween.interpolate_property(self, "global_position", global_position, nPosition, 0.1)
 			tween.start()
 		if not tween.is_active():
 			velocity.y += gravity
-#			if Global.fasterNetwork:
-				
 			move_and_slide(velocity)
 
 func tick(delta):
 	var canMove = not Console.focus and not Global.scene.menu
 	
-	$Username.text = Network.databaseData["username"]
+	if canMove:
+		mousePos = get_global_mouse_position()
+		
+		if Input.is_action_just_pressed("1"):
+			itemR += 1
+			if itemR > len(items):
+				itemR = 0
+	
+		if Input.is_action_just_pressed("2"):
+			itemL += 1
+			if itemL > len(items):
+				itemL = 0
+	
+	$Username.text = Server.dbData["username"]
 	var inputX = Input.get_action_strength("right") - Input.get_action_strength("left")
 	velocity.y += gravity * delta
 	
@@ -185,14 +181,15 @@ func tick(delta):
 	if not onFloor and not is_on_floor():
 		$Visual/Player/AnimationPlayer.play("Jump")
 		lastAnim = "Jump"
-		
+	
 	arms = [false, false]
-	if Input.is_action_pressed("arms"):
-		arms = [true, true]
-	if Input.is_action_pressed("rightClick"):
-		arms[0] = true
-	if Input.is_action_pressed("leftClick"):
-		arms[1] = true
+	if canMove:
+		if Input.is_action_pressed("arms"):
+			arms = [true, true]
+		if Input.is_action_pressed("rightClick"):
+			arms[0] = true
+		if Input.is_action_pressed("leftClick"):
+			arms[1] = true
 	
 	$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Items/" + items[itemR-1] + ".png")
 	$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Items/" + items[itemL-1] + ".png")
@@ -216,14 +213,21 @@ func tick(delta):
 	
 	RCooldown -= delta
 	LCooldown -= delta
-	if (Input.is_action_pressed("leftClick") or Input.is_action_pressed("arms")) and RCooldown <= 0:
-		RCooldown = -1
-		used(items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees)
-		Network.sendMsg({"broadcast": ["use", [Network.id, items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees], false]})
-	if (Input.is_action_pressed("rightClick") or Input.is_action_pressed("arms")) and LCooldown <= 0:
-		LCooldown = -1
-		used(items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees)
-		Network.sendMsg({"broadcast": ["use", [Network.id, items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees], false]})
+	if canMove:
+		if (Input.is_action_pressed("leftClick") or Input.is_action_pressed("arms")) and RCooldown <= 0:
+			if Input.is_action_pressed("ADMIN_MODE"):
+				RCooldown = 0
+			else:
+				RCooldown = 0.35
+			used(items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
+			rpc("used", items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
+		if (Input.is_action_pressed("rightClick") or Input.is_action_pressed("arms")) and LCooldown <= 0:
+			if Input.is_action_pressed("ADMIN_MODE"):
+				LCooldown = 0
+			else:
+				LCooldown = 0.35
+			used(items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
+			rpc("used", items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
 
 func _on_FloorDetect_body_entered(body):
 	if body.name != name and body.name != "Projectile":
@@ -237,12 +241,16 @@ func _on_EnemyDetect_body_entered(body):
 	if "slime" in body.name or "Blue_jumper" in body.name:
 		velocity.x = -2000*$Visual.scale.x
 		velocity.y = -250
+	if "Projectile" in body.name:
+		if is_network_master() and get_tree().get_network_unique_id() != body.id:
+			position = spawn
+			velocity = Vector2.ZERO
 
 func _on_tick_rate_timeout():
-	if name == Network.id:
-		Network.data["position"] = global_position
-		Network.data["velocity"] = velocity
-		Network.data["username"] = $Username.text
-		Network.data["animation"] = lastAnim
-		Network.data["arms"] = [arms, get_global_mouse_position()]
-		Network.data["items"] = [itemR, itemL]
+	if is_network_master():
+		rset_unreliable("nPosition", global_position)
+		rset_unreliable("nVelocity", velocity)
+		rset_unreliable("nUsername", $Username.text)
+		rset_unreliable("nAnimation", lastAnim)
+		rset_unreliable("nArms", [arms, mousePos])
+		rset_unreliable("nItems", [itemR, itemL])

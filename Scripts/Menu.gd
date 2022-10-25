@@ -1,8 +1,10 @@
 extends Control
 
 func _on_Play_pressed():
-	Network.sendMsg({"joingame": Network.id})
-	Global.changeScene("main")
+	if Global.ready:
+		Server.rpc("joinGame", get_tree().get_network_unique_id(), Server.dbData["username"])
+		Global.changeScene("main")
 
 func _on_Options_pressed():
-	Global.changeScene("options")
+	if Global.ready:
+		Global.changeScene("options")

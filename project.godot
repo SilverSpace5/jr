@@ -11,14 +11,14 @@ config_version=4
 [application]
 
 config/name="JR"
-run/main_scene="res://Scenes/Connect.tscn"
+run/main_scene="res://Scenes/Menu.tscn"
 run/low_processor_mode=true
 config/icon="res://icon.png"
 
 [autoload]
 
 Global="*res://Scripts/Global.gd"
-Network="*res://Scripts/Network.gd"
+Server="*res://Scripts/Server.gd"
 SaveLoad="*res://Scripts/SaveLoad.gd"
 Console="*res://Console.tscn"
 Players="*res://Players.tscn"
