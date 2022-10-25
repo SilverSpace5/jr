@@ -26,6 +26,9 @@ func _physics_process(delta):
 		despawnTimer += delta
 		if despawnTimer >= despawn:
 			queue_free()
+	else:
+		look_at(position + linear_velocity)
+		#rotation_degrees -= 45
 	despawnTimer2 += delta
 	if despawnTimer2 >= despawn*10:
 		queue_free()
