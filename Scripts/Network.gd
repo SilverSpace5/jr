@@ -63,7 +63,6 @@ func sendMsg(data, wait=false):
 		while not gotData:
 			yield(get_tree().create_timer(0.1), "timeout")
 		return returnData
-		
 
 func updateDatabaseData(id):
 	sendMsg({"databaseset": databaseData, "databaseid": id})
