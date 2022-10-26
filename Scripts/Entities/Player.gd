@@ -19,7 +19,7 @@ var RCooldown = 0
 var LCooldown = 0
 var mousePos = Vector2(0, 0)
 
-var items = ["sword", "stick", "bow", "shield"]
+var items = ["none", "sword", "stick", "bow", "shield"]
 
 puppet var nPosition = Vector2(0, 0)
 puppet var nVelocity = Vector2(0, 0)
@@ -40,14 +40,17 @@ puppet func used(item, pos=global_position, rotation2=0, id=0):
 #			rotation3 -= 45
 #		else:
 #			rotation3 += 45
-		var proj = load("res://Instances/Projectile.tscn").instance()
-		Global.scene.add_child(proj)
-		proj.global_position = pos
+		var proj = Global.instance_node_at_location(load("res://Instances/Projectile.tscn"), Global.scene, pos)
 		proj.rotation_degrees = rotation2
-		proj.despawn = 2
+		proj.despawn = 20
 		proj.id = id
+		proj.itemName = "arrow"
 		proj.item = load("res://Assets/Projectiles/arrow.png")
 		proj.velocity = Vector2(500, 500).rotated(deg2rad(rotation2-45))
+
+func _ready():
+	$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = true
+	$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = true
 
 func _process(delta):
 	if is_network_master():
@@ -70,10 +73,8 @@ func _process(delta):
 			else:
 				$Visual.scale.x = -1
 		
-		$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Assets/Items/" + items[nItems[0]-1] + ".png")
-		$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Assets/Items/" + items[nItems[1]-1] + ".png")
-		$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = nItems[0] != 0
-		$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = nItems[1] != 0
+		$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Assets/Items/" + items[nItems[0]] + ".png")
+		$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Assets/Items/" + items[nItems[1]] + ".png")
 		
 		if true in nArms[0]:
 			mousePos = nArms[1]
@@ -104,12 +105,12 @@ func tick(delta):
 		
 		if Input.is_action_just_pressed("1"):
 			itemR += 1
-			if itemR > len(items):
+			if itemR >= len(items):
 				itemR = 0
 	
 		if Input.is_action_just_pressed("2"):
 			itemL += 1
-			if itemL > len(items):
+			if itemL >= len(items):
 				itemL = 0
 	
 	$Username.text = Server.dbData["username"]
@@ -191,10 +192,8 @@ func tick(delta):
 		if Input.is_action_pressed("leftClick"):
 			arms[1] = true
 	
-	$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Assets/Items/" + items[itemR-1] + ".png")
-	$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Assets/Items/" + items[itemL-1] + ".png")
-	$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = itemR != 0
-	$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = itemL != 0
+	$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Assets/Items/" + items[itemR] + ".png")
+	$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Assets/Items/" + items[itemL] + ".png")
 	
 	if arms[0]:
 		$Visual/Player/Skeleton2D/Body/LeftArm.look_at(get_global_mouse_position())
@@ -219,15 +218,15 @@ func tick(delta):
 				RCooldown = 0
 			else:
 				RCooldown = 0.35
-			used(items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
-			rpc("used", items[itemR-1], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
+			used(items[itemR], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
+			rpc("used", items[itemR], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
 		if (Input.is_action_pressed("rightClick") or Input.is_action_pressed("arms")) and LCooldown <= 0:
 			if Input.is_action_pressed("ADMIN_MODE"):
 				LCooldown = 0
 			else:
 				LCooldown = 0.35
-			used(items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
-			rpc("used", items[itemL-1], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
+			used(items[itemL], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
+			rpc("used", items[itemL], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
 
 func _on_FloorDetect_body_entered(body):
 	if body.name != name and body.name != "Projectile":
