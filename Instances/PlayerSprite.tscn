@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Assets/Player.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Items/stick.png" type="Texture" id=2]
@@ -357,6 +357,95 @@ tracks/6/keys = {
 "values": [ Vector2( 0, 5 ) ]
 }
 
+[sub_resource type="Animation" id=6]
+resource_name = "Stomp"
+length = 0.001
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Skeleton2D/Body/RightLeg:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 94.3482 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Skeleton2D/Body/LeftLeg:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 86.3516 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Skeleton2D/Body/LeftArm:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 240.403 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Skeleton2D/Body/RightArm:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -63.3282 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Skeleton2D/Body:rotation_degrees")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Skeleton2D/Body/Head:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -1, -10 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Skeleton2D/Body:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ) ]
+}
+
 [sub_resource type="Animation" id=2]
 resource_name = "run"
 loop = true
@@ -449,12 +538,13 @@ tracks/6/keys = {
 z_index = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "Idle"
 anims/Idle = SubResource( 3 )
 anims/Jump = SubResource( 4 )
 anims/RESET = SubResource( 1 )
 anims/Roll = SubResource( 5 )
+anims/Stomp = SubResource( 6 )
 anims/run = SubResource( 2 )
+blend_times = [ "Idle", "Idle", 0.1, "Idle", "Jump", 0.1, "Idle", "RESET", 0.1, "Idle", "Roll", 0.1, "Idle", "Stomp", 0.1, "Idle", "run", 0.1, "Jump", "Idle", 0.1, "Jump", "Jump", 0.1, "Jump", "RESET", 0.1, "Jump", "Roll", 0.1, "Jump", "Stomp", 0.1, "Jump", "run", 0.1, "Roll", "Idle", 0.1, "Roll", "Jump", 0.1, "Roll", "RESET", 0.1, "Roll", "Roll", 0.1, "Roll", "Stomp", 0.1, "Roll", "run", 0.1, "Stomp", "Idle", 0.1, "Stomp", "Jump", 0.1, "Stomp", "RESET", 0.1, "Stomp", "Roll", 0.1, "Stomp", "Stomp", 0.1, "Stomp", "run", 0.1, "run", "Idle", 0.1, "run", "Jump", 0.1, "run", "RESET", 0.1, "run", "Roll", 0.1, "run", "Stomp", 0.1, "run", "run", 0.1 ]
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 position = Vector2( -11, -15 )

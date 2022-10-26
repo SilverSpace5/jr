@@ -39,34 +39,37 @@ func _ready():
 	while not Server.connected:
 		yield(get_tree().create_timer(0.1), "timeout")
 	
-	var list = yield(Server.listData(), "completed")
-	#print(list)
-	var data = SaveLoad.loadData("embercore-id4.data")
-	if data.has("id"):
-		id = data["id"]
-		if not id in list:
+	if not Server.offline:
+		var list = yield(Server.listData(), "completed")
+		#print(list)
+		var data = SaveLoad.loadData("embercore-id4.data")
+		if data.has("id"):
+			id = data["id"]
+			if not id in list:
+				Server.dbData = defaultDatabase.duplicate(true)
+				Server.setData(id, Server.dbData)
+				SaveLoad.saveData("embercore-id4.data", {"id": id})
+		else:
+			id = getId(10)
 			Server.dbData = defaultDatabase.duplicate(true)
 			Server.setData(id, Server.dbData)
 			SaveLoad.saveData("embercore-id4.data", {"id": id})
+		
+		print(id)
+	
+		Console.log2("Getting database data...")
+		Server.dbData = yield(Server.fetchData(id), "completed")
+		for key in Server.dbData:
+			if not key in defaultDatabase.keys():
+				Server.dbData.erase(key)
+
+		for key in defaultDatabase:
+			if not key in Server.dbData.keys():
+				Server.dbData[key] = defaultDatabase[key]
+		print("Got data: " + str(Server.dbData))
+		Console.log2("Done")
 	else:
-		id = getId(10)
 		Server.dbData = defaultDatabase.duplicate(true)
-		Server.setData(id, Server.dbData)
-		SaveLoad.saveData("embercore-id4.data", {"id": id})
-	
-	print(id)
-	
-	Console.log2("Getting database data...")
-	Server.dbData = yield(Server.fetchData(id), "completed")
-	for key in Server.dbData:
-		if not key in defaultDatabase.keys():
-			Server.dbData.erase(key)
-	
-	for key in defaultDatabase:
-		if not key in Server.dbData.keys():
-			Server.dbData[key] = defaultDatabase[key]
-	print("Got data: " + str(Server.dbData))
-	Console.log2("Done")
 	
 	ready = true
 

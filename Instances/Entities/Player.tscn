@@ -1,11 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Entities/Player.gd" type="Script" id=2]
 [ext_resource path="res://default.tres" type="DynamicFont" id=8]
 [ext_resource path="res://Instances/PlayerSprite.tscn" type="PackedScene" id=9]
-
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 4.5, 15.2081 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 4.5227, 0.953125 )
@@ -19,13 +16,11 @@ z_index = 2
 collision_layer = 2
 collision_mask = 2
 script = ExtResource( 2 )
-jumpSpeed = 275
+jumpSpeed = 250
 gravity = 1850
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0.501297, 0.998666 )
-scale = Vector2( 1, 0.973 )
-shape = SubResource( 1 )
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -6.01945, -14.9922, 6.98054, -15.0091, 2.01946, 14.9974, -0.98054, 15.0013 )
 
 [node name="FloorDetect" type="Area2D" parent="."]
 position = Vector2( -3, 0.00389175 )

@@ -5,6 +5,7 @@ Server Code:
 https://replit.com/join/azfqmiywou-silverspace505
 """
 
+var offline = false
 var websocket_url = "wss://Embercore-Server.silverspace505.repl.co"
 var player = load("res://Instances/Entities/Player.tscn")
 var data = {}
@@ -41,6 +42,12 @@ func _ready():
 	peer.connect("connection_failed", self, "_failed")
 	peer.connect("connection_succeeded", self, "_connected")
 	peer.connect("peer_disconnected", self, "_player_disconnected")
+	yield(get_tree().create_timer(1), "timeout")
+	if not connected:
+		peer.disconnect_from_host()
+		Console.log2("Failed to connect, switching to offline mode")
+		offline = true
+		connected = true
 
 func fetchData(id):
 	gotData = false
@@ -136,10 +143,11 @@ func _exit_tree():
 func instance_player(id, pos=Vector2(0, 0)) -> Object:
 	var player_instance = Global.instance_node_at_location(player, Players, pos)
 	player_instance.name = str(id)
-	player_instance.set_network_master(id)
+	if not offline:
+		player_instance.set_network_master(id)
 	return player_instance
 
 func _process(delta):
-	if dbData != lastData and Global.ready:
+	if dbData != lastData and Global.ready and not offline:
 		setData(Global.id, dbData)
 		lastData = dbData.duplicate(true)

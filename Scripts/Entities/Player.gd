@@ -19,6 +19,7 @@ var RCooldown = 0
 var LCooldown = 0
 var mousePos = Vector2(0, 0)
 var lastAnim2 = "Idle"
+var stomped = 0
 
 var items = ["none", "sword", "stick", "bow", "shield"]
 
@@ -58,7 +59,7 @@ func _ready():
 	$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = true
 
 func _process(delta):
-	if is_network_master():
+	if is_network_master() or Server.offline:
 		tick(delta)
 	else:
 			
@@ -125,7 +126,14 @@ func tick(delta):
 	
 	$Username.text = Server.dbData["username"]
 	var inputX = Input.get_action_strength("right") - Input.get_action_strength("left")
+	
+	if Input.is_action_pressed("down"):
+		if velocity.y < 0:
+			velocity.y = 0
+		gravity *= 1.5
 	velocity.y += gravity * delta
+	if Input.is_action_pressed("down"):
+		gravity /= 1.5
 	
 	$FloorDetect.update()
 	
@@ -145,23 +153,34 @@ func tick(delta):
 		velocity.y = gravity * delta
 	
 	if canMove and not rolling and (Input.is_action_just_pressed("jump") or (Input.is_action_pressed("jump") and jump > 0)) and (floorFrames <= 3 or (jump <= 8 and holdJump)):
+		if stomped > 0:
+			jumpSpeed *= 1.25
 		var jump2 = jumpSpeed + (jumpSpeed*0.1*jump)
 		velocity.y = -jump2
 		jump += 48 * delta
+		if stomped > 0:
+			jumpSpeed /= 1.25
 	
 	if rolling:
 		$Visual/Player/AnimationPlayer.play("Roll")
 		lastAnim = "Roll"
 		speed *= 2
-	if is_on_floor():
-		velocity.x *= 0.33 
+	var fast =  abs(velocity.x) > 400
+	var slide = not is_on_floor() or fast
+	
+	if not fast:
+		velocity.x *= 0.33
 	else:
-		velocity.x *= 0.8 
-		speed /= 3
+		if is_on_floor():
+			velocity.x *= 0.96
+		else:
+			velocity.x *= 0.98
+		speed /= 15
+		
 	if canMove:
 		velocity.x += inputX * speed
-	if not is_on_floor():
-		speed *= 3
+	if fast:
+		speed *= 15
 	if rolling:
 		speed /= 2
 	
@@ -205,8 +224,13 @@ func tick(delta):
 			$Visual/Player/AnimationPlayer.playback_speed = 0
 	
 	if not onFloor and not is_on_floor() and not rolling:
-		$Visual/Player/AnimationPlayer.play("Jump")
-		lastAnim = "Jump"
+		if Input.is_action_pressed("down"):
+			$Visual/Player/AnimationPlayer.play("Stomp")
+			lastAnim = "Stomp"
+			stomped = 10
+		else:
+			$Visual/Player/AnimationPlayer.play("Jump")
+			lastAnim = "Jump"
 
 	arms = [false, false]
 	if canMove and not rolling:
@@ -235,6 +259,7 @@ func tick(delta):
 		position = spawn
 		velocity = Vector2.ZERO
 	
+	stomped -= 20 * delta
 	RCooldown -= delta
 	LCooldown -= delta
 	if canMove and not rolling:
@@ -247,7 +272,8 @@ func tick(delta):
 			else:
 				RCooldown = cooldown2
 			used(items[itemR], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
-			rpc("used", items[itemR], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
+			if not Server.offline:
+				rpc("used", items[itemR], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
 		if (Input.is_action_pressed("rightClick") or Input.is_action_pressed("arms")) and LCooldown <= 0:
 			var cooldown2 = 0
 			if items[itemL] == "bow":
@@ -257,27 +283,28 @@ func tick(delta):
 			else:
 				LCooldown = cooldown2
 			used(items[itemL], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
-			rpc("used", items[itemL], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
+			if not Server.offline:
+				rpc("used", items[itemL], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
 
 func _on_FloorDetect_body_entered(body):
-	if body.name != name and body.name != "Projectile":
+	if body.name != name and "Projectile" in body.name:
 		onFloor = true
 
 func _on_FloorDetect_body_exited(body):
-	if body.name != name and body.name != "Projectile":
+	if body.name != name and "Projectile" in body.name:
 		onFloor = false
 
 func _on_EnemyDetect_body_entered(body):
 	if "slime" in body.name or "Blue_jumper" in body.name:
-		velocity.x = -2000*$Visual.scale.x
+		velocity.x = -750*$Visual.scale.x
 		velocity.y = -250
-	if "Projectile" in body.name:
+	if "Projectile" in body.name and not Server.offline:
 		if is_network_master() and get_tree().get_network_unique_id() != body.id:
 			position = spawn
 			velocity = Vector2.ZERO
 
 func _on_tick_rate_timeout():
-	if is_network_master():
+	if is_network_master() and not Server.offline:
 		rset_unreliable("nPosition", global_position)
 		rset_unreliable("nVelocity", velocity)
 		rset_unreliable("nUsername", $Username.text)
