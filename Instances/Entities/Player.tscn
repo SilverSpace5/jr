@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Scripts/Entities/Player.gd" type="Script" id=2]
 [ext_resource path="res://default.tres" type="DynamicFont" id=8]
-[ext_resource path="res://PlayerSprite.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Instances/PlayerSprite.tscn" type="PackedScene" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.5, 15.2081 )
