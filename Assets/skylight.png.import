@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tick.png-7aa9b48a887567a232775cc931031913.stex"
+path="res://.import/skylight.png-2bfbc04ba202f59113504de481a4902e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://extra/tick.png"
-dest_files=[ "res://.import/tick.png-7aa9b48a887567a232775cc931031913.stex" ]
+source_file="res://Assets/skylight.png"
+dest_files=[ "res://.import/skylight.png-2bfbc04ba202f59113504de481a4902e.stex" ]
 
 [params]
 
@@ -20,8 +20,8 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
-flags/mipmaps=true
+flags/filter=true
+flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true
