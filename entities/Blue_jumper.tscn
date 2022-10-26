@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Scripts/Blue_jumper.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Entities/Blue_jumper.gd" type="Script" id=1]
 [ext_resource path="res://entities/pictures/blue_jumper Sprite Sheet.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
