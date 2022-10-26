@@ -15,6 +15,7 @@ var itemName = ""
 
 func _physics_process(delta):
 	if not init:
+		visible = true
 		init = true
 		$Sprite.texture = item
 		$CollisionShape2D.scale.x = $Sprite.texture.get_width()
@@ -31,6 +32,9 @@ func _physics_process(delta):
 				queue_free()
 		else:
 			look_at(position + linear_velocity)
+	if itemName == "trail":
+		gravity_scale = 0
+		$CollisionShape2D.disabled = true
 	despawnTimer += delta
 	if despawnTimer >= despawn:
 		queue_free()

@@ -18,6 +18,7 @@ var itemL = 0
 var RCooldown = 0
 var LCooldown = 0
 var mousePos = Vector2(0, 0)
+var lastAnim2 = "Idle"
 
 var items = ["none", "sword", "stick", "bow", "shield"]
 
@@ -35,11 +36,6 @@ onready var tween = $Tween
 
 puppet func used(item, pos=global_position, rotation2=0, id=0):
 	if item == "bow":
-#		var rotation3 = rotation2
-#		if $Visual.scale.x == 1:
-#			rotation3 -= 45
-#		else:
-#			rotation3 += 45
 		var proj = Global.instance_node_at_location(load("res://Instances/Projectile.tscn"), Global.scene, pos)
 		proj.rotation_degrees = rotation2
 		proj.despawn = 20
@@ -47,6 +43,15 @@ puppet func used(item, pos=global_position, rotation2=0, id=0):
 		proj.itemName = "arrow"
 		proj.item = load("res://Assets/Projectiles/arrow.png")
 		proj.velocity = Vector2(500, 500).rotated(deg2rad(rotation2-45))
+	elif item != "none":
+		if $Visual.scale.x < 0:
+			rotation2 -= 180
+		var proj = Global.instance_node_at_location(load("res://Instances/Projectile.tscn"), Global.scene, pos)
+		proj.rotation_degrees = rotation2
+		proj.despawn = 0.1
+		proj.id = id
+		proj.itemName = "trail"
+		proj.item = load("res://Assets/Items/" + item + ".png")
 
 func _ready():
 	$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = true
@@ -58,20 +63,24 @@ func _process(delta):
 	else:
 			
 		$Username.text = nUsername
+		
 		$Visual/Player/AnimationPlayer.play(nAnimation)
 		
 		velocity = nVelocity
-		
-		if nAnimation != "Idle":
-			$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
-		else:
-			$Visual/Player/AnimationPlayer.playback_speed = 0.5
 		
 		if abs(velocity.x) > 0.2:
 			if velocity.x > 0:
 				$Visual.scale.x = 1
 			else:
 				$Visual.scale.x = -1
+		
+		if nAnimation != "Idle":
+			$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
+			if nAnimation == "Roll":
+				$Visual/Player/AnimationPlayer.playback_speed /= 2
+				$Visual/Player/AnimationPlayer.playback_speed *= $Visual.scale.x
+		else:
+			$Visual/Player/AnimationPlayer.playback_speed = 0.5
 		
 		$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Assets/Items/" + items[nItems[0]] + ".png")
 		$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Assets/Items/" + items[nItems[1]] + ".png")
@@ -98,6 +107,7 @@ func _process(delta):
 			move_and_slide(velocity)
 
 func tick(delta):
+	var rolling = Input.is_action_pressed("Roll") and abs(velocity.x) > 100
 	var canMove = not Console.focus and not Global.scene.menu
 	
 	if canMove:
@@ -134,11 +144,15 @@ func tick(delta):
 	if is_on_ceiling():
 		velocity.y = gravity * delta
 	
-	if canMove and (Input.is_action_just_pressed("jump") or (Input.is_action_pressed("jump") and jump > 0)) and (floorFrames <= 3 or (jump <= 8 and holdJump)):
+	if canMove and not rolling and (Input.is_action_just_pressed("jump") or (Input.is_action_pressed("jump") and jump > 0)) and (floorFrames <= 3 or (jump <= 8 and holdJump)):
 		var jump2 = jumpSpeed + (jumpSpeed*0.1*jump)
 		velocity.y = -jump2
 		jump += 48 * delta
 	
+	if rolling:
+		$Visual/Player/AnimationPlayer.play("Roll")
+		lastAnim = "Roll"
+		speed *= 2
 	if is_on_floor():
 		velocity.x *= 0.33 
 	else:
@@ -148,6 +162,8 @@ func tick(delta):
 		velocity.x += inputX * speed
 	if not is_on_floor():
 		speed *= 3
+	if rolling:
+		speed /= 2
 	
 	if Input.is_action_pressed("ADMIN_MODE") and canMove:
 		if Input. is_action_pressed("fast"):
@@ -165,26 +181,35 @@ func tick(delta):
 	
 	move_and_slide(velocity, Vector2.UP)
 	
-	if abs(velocity.x) > 0.2:
-		$Visual/Player/AnimationPlayer.play("run")
-		lastAnim = "run"
+	if abs(velocity.x) > 100:
+		if not rolling:
+			$Visual/Player/AnimationPlayer.play("run")
+			lastAnim = "run"
 		$Visual/Player/AnimationPlayer.playback_speed = velocity.x/100
-		#print(velocity.x/200)
+		
 		if velocity.x > 0:
 			$Visual.scale.x = 1
 		else:
 			$Visual.scale.x = -1
+		
+		if rolling:
+			$Visual/Player/AnimationPlayer.playback_speed /= 2
+			$Visual/Player/AnimationPlayer.playback_speed *= $Visual.scale.x
+		
 	else:
 		$Visual/Player/AnimationPlayer.playback_speed = 0.5
-		$Visual/Player/AnimationPlayer.play("Idle")
-		lastAnim = "Idle"
+		if not rolling:
+			$Visual/Player/AnimationPlayer.play("Idle")
+			lastAnim = "Idle"
+		else:
+			$Visual/Player/AnimationPlayer.playback_speed = 0
 	
-	if not onFloor and not is_on_floor():
+	if not onFloor and not is_on_floor() and not rolling:
 		$Visual/Player/AnimationPlayer.play("Jump")
 		lastAnim = "Jump"
-	
+
 	arms = [false, false]
-	if canMove:
+	if canMove and not rolling:
 		if Input.is_action_pressed("arms"):
 			arms = [true, true]
 		if Input.is_action_pressed("rightClick"):
@@ -212,19 +237,25 @@ func tick(delta):
 	
 	RCooldown -= delta
 	LCooldown -= delta
-	if canMove:
+	if canMove and not rolling:
 		if (Input.is_action_pressed("leftClick") or Input.is_action_pressed("arms")) and RCooldown <= 0:
+			var cooldown2 = 0
+			if items[itemR] == "bow":
+				cooldown2 = 0.35
 			if Input.is_action_pressed("ADMIN_MODE"):
 				RCooldown = 0
 			else:
-				RCooldown = 0.35
+				RCooldown = cooldown2
 			used(items[itemR], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
 			rpc("used", items[itemR], $Visual/Player/Skeleton2D/Body/RightArm/Item.global_position, $Visual/Player/Skeleton2D/Body/RightArm.global_rotation_degrees, get_tree().get_network_unique_id())
 		if (Input.is_action_pressed("rightClick") or Input.is_action_pressed("arms")) and LCooldown <= 0:
+			var cooldown2 = 0
+			if items[itemL] == "bow":
+				cooldown2 = 0.35
 			if Input.is_action_pressed("ADMIN_MODE"):
 				LCooldown = 0
 			else:
-				LCooldown = 0.35
+				LCooldown = cooldown2
 			used(items[itemL], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
 			rpc("used", items[itemL], $Visual/Player/Skeleton2D/Body/LeftArm/Item.global_position, $Visual/Player/Skeleton2D/Body/LeftArm.global_rotation_degrees, get_tree().get_network_unique_id())
 
