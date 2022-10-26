@@ -40,13 +40,13 @@ puppet func used(item, pos=global_position, rotation2=0, id=0):
 #			rotation3 -= 45
 #		else:
 #			rotation3 += 45
-		var proj = load("res://Projectile.tscn").instance()
+		var proj = load("res://Instances/Projectile.tscn").instance()
 		Global.scene.add_child(proj)
 		proj.global_position = pos
 		proj.rotation_degrees = rotation2
 		proj.despawn = 2
 		proj.id = id
-		proj.item = load("res://Projectiles/arrow.png")
+		proj.item = load("res://Assets/Projectiles/arrow.png")
 		proj.velocity = Vector2(500, 500).rotated(deg2rad(rotation2-45))
 
 func _process(delta):
@@ -70,8 +70,8 @@ func _process(delta):
 			else:
 				$Visual.scale.x = -1
 		
-		$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Items/" + items[nItems[0]-1] + ".png")
-		$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Items/" + items[nItems[1]-1] + ".png")
+		$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Assets/Items/" + items[nItems[0]-1] + ".png")
+		$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Assets/Items/" + items[nItems[1]-1] + ".png")
 		$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = nItems[0] != 0
 		$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = nItems[1] != 0
 		
@@ -191,8 +191,8 @@ func tick(delta):
 		if Input.is_action_pressed("leftClick"):
 			arms[1] = true
 	
-	$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Items/" + items[itemR-1] + ".png")
-	$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Items/" + items[itemL-1] + ".png")
+	$Visual/Player/Skeleton2D/Body/RightArm/Item.texture = load("res://Assets/Items/" + items[itemR-1] + ".png")
+	$Visual/Player/Skeleton2D/Body/LeftArm/Item.texture = load("res://Assets/Items/" + items[itemL-1] + ".png")
 	$Visual/Player/Skeleton2D/Body/RightArm/Item.visible = itemR != 0
 	$Visual/Player/Skeleton2D/Body/LeftArm/Item.visible = itemL != 0
 	

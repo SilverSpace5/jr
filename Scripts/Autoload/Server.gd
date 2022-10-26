@@ -6,7 +6,7 @@ https://replit.com/join/azfqmiywou-silverspace505
 """
 
 var websocket_url = "wss://Embercore-Server.silverspace505.repl.co"
-var player = load("res://entities/Player.tscn")
+var player = load("res://Instances/Entities/Player.tscn")
 var data = {}
 var dbData = {}
 var lastData = {}

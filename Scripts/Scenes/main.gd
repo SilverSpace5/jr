@@ -4,7 +4,7 @@ export (Vector2) var spawn = Vector2(0, 0)
 export (float) var zoom = 0.7
 var menu = false
 var consoleWait = 0
-var lightNode = load("res://light.tscn")
+var lightNode = load("res://Instances/light.tscn")
 
 func _ready():
 	$peaceful_town.play(1.75)
