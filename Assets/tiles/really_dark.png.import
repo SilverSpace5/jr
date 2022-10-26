@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/stone.png-1a8882cab5949e023b6e4c3c15efc09d.stex"
+path="res://.import/really_dark.png-923e45d57074db2fa21739d0579197e0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tiles/stone.png"
-dest_files=[ "res://.import/stone.png-1a8882cab5949e023b6e4c3c15efc09d.stex" ]
+source_file="res://Assets/tiles/really_dark.png"
+dest_files=[ "res://.import/really_dark.png-923e45d57074db2fa21739d0579197e0.stex" ]
 
 [params]
 
@@ -20,8 +20,8 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
-flags/mipmaps=true
+flags/filter=true
+flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true

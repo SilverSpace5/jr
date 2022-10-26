@@ -5,7 +5,7 @@
 [ext_resource path="res://World.tres" type="TileSet" id=3]
 [ext_resource path="res://music and sound/music/forest.mp3" type="AudioStream" id=4]
 [ext_resource path="res://extra/tick.png" type="Texture" id=5]
-[ext_resource path="res://tiles/torch.png" type="Texture" id=9]
+[ext_resource path="res://Assets/tiles/torch.png" type="Texture" id=9]
 [ext_resource path="res://skylight.png" type="Texture" id=10]
 [ext_resource path="res://entities/green_slime.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Scripts/main.gd" type="Script" id=12]

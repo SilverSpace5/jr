@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://World.tres" type="TileSet" id=1]
-[ext_resource path="res://tiles/cloud_piece.png" type="Texture" id=3]
-[ext_resource path="res://tiles/sun_piece.png" type="Texture" id=4]
-[ext_resource path="res://tiles/really_dark.png" type="Texture" id=6]
-[ext_resource path="res://tiles/dark begin.png" type="Texture" id=9]
-[ext_resource path="res://tiles/dark.png" type="Texture" id=10]
-[ext_resource path="res://tiles/pure dark.png" type="Texture" id=11]
-[ext_resource path="res://tiles/torch.png" type="Texture" id=12]
+[ext_resource path="res://Assets/tiles/cloud_piece.png" type="Texture" id=3]
+[ext_resource path="res://Assets/tiles/sun_piece.png" type="Texture" id=4]
+[ext_resource path="res://Assets/tiles/really_dark.png" type="Texture" id=6]
+[ext_resource path="res://Assets/tiles/dark begin.png" type="Texture" id=9]
+[ext_resource path="res://Assets/tiles/dark.png" type="Texture" id=10]
+[ext_resource path="res://Assets/tiles/pure dark.png" type="Texture" id=11]
+[ext_resource path="res://Assets/tiles/torch.png" type="Texture" id=12]
 
 [sub_resource type="TileSet" id=3]
 0/name = "cloud_piece.png 0"

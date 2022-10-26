@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/stone_back.png-e0f52e47f586a5834f706398cc9c0994.stex"
+path="res://.import/sand.png-0759bb87202006fbbcd88fe1ff344217.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tiles/stone_back.png"
-dest_files=[ "res://.import/stone_back.png-e0f52e47f586a5834f706398cc9c0994.stex" ]
+source_file="res://Assets/tiles/sand.png"
+dest_files=[ "res://.import/sand.png-0759bb87202006fbbcd88fe1ff344217.stex" ]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
 flags/filter=false
-flags/mipmaps=false
+flags/mipmaps=true
 flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true

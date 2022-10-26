@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/grass.png-c071e97c7a48eab5d5946768c0bc8946.stex"
+path="res://.import/sun_piece.png-8eb8f14b66baa7aec4f732a908b54c6e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tiles/grass.png"
-dest_files=[ "res://.import/grass.png-c071e97c7a48eab5d5946768c0bc8946.stex" ]
+source_file="res://Assets/tiles/sun_piece.png"
+dest_files=[ "res://.import/sun_piece.png-8eb8f14b66baa7aec4f732a908b54c6e.stex" ]
 
 [params]
 
@@ -20,8 +20,8 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
-flags/mipmaps=true
+flags/filter=true
+flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true

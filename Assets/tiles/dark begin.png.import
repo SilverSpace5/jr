@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sun_piece.png-bba4d0a472ccfde7f44e960c81e1e443.stex"
+path="res://.import/dark begin.png-6f6a8fc0e0bd519791cace9e65c116f4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tiles/sun_piece.png"
-dest_files=[ "res://.import/sun_piece.png-bba4d0a472ccfde7f44e960c81e1e443.stex" ]
+source_file="res://Assets/tiles/dark begin.png"
+dest_files=[ "res://.import/dark begin.png-6f6a8fc0e0bd519791cace9e65c116f4.stex" ]
 
 [params]
 
