@@ -17,9 +17,9 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://Scripts/Global.gd"
-Server="*res://Scripts/Server.gd"
-SaveLoad="*res://Scripts/SaveLoad.gd"
+Global="*res://Scripts/Autoload/Global.gd"
+Server="*res://Scripts/Autoload/Server.gd"
+SaveLoad="*res://Scripts/Autoload/SaveLoad.gd"
 Console="*res://Console.tscn"
 Players="*res://Players.tscn"
 MenuTheme="*res://menu_theme.tscn"
