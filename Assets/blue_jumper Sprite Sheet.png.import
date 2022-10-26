@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/slime.png-6c03d7d362d68fdea9b19ce334066bf4.stex"
+path="res://.import/blue_jumper Sprite Sheet.png-250ead7b2440890b3a062a65bfdedbb5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://entities/pictures/slime.png"
-dest_files=[ "res://.import/slime.png-6c03d7d362d68fdea9b19ce334066bf4.stex" ]
+source_file="res://Assets/blue_jumper Sprite Sheet.png"
+dest_files=[ "res://.import/blue_jumper Sprite Sheet.png-250ead7b2440890b3a062a65bfdedbb5.stex" ]
 
 [params]
 
