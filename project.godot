@@ -21,8 +21,8 @@ Global="*res://Scripts/Autoload/Global.gd"
 Server="*res://Scripts/Autoload/Server.gd"
 SaveLoad="*res://Scripts/Autoload/SaveLoad.gd"
 Console="*res://Console.tscn"
-Players="*res://Instances/Players.tscn"
-MenuTheme="*res://menu_theme.tscn"
+Players="*res://Instances/Autoload/Players.tscn"
+MenuTheme="*res://Instances/Autoload/menu_theme.tscn"
 
 [debug]
 
