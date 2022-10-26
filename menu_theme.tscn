@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Assets/music/menu.mp3" type="AudioStream" id=1]
-[ext_resource path="res://menu_theme.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/Autoload/menu_theme.gd" type="Script" id=2]
 
 [node name="menu_theme" type="AudioStreamPlayer2D"]
 position = Vector2( 514, 299 )
