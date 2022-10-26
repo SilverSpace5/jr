@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://entities/pictures/player2.png" type="Texture" id=1]
-[ext_resource path="res://Items/stick.png" type="Texture" id=2]
-[ext_resource path="res://Items/sword.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Items/stick.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Items/sword.png" type="Texture" id=3]
 
 [sub_resource type="Animation" id=3]
 resource_name = "Idle"
@@ -276,3 +276,5 @@ position = Vector2( 1, 6 )
 rotation = 0.785398
 rest = Transform2D( -4.37114e-08, 1, -1, -4.37114e-08, 1, 6 )
 default_length = 4.0
+
+[node name="Body" type="Node2D" parent="."]
