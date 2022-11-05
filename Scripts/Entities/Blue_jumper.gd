@@ -18,3 +18,13 @@ func _physics_process(delta):
 			$BlueJumperSpriteSheet.frame = 0
 		else:
 			$BlueJumperSpriteSheet.frame += 1
+	
+var entered = false
+
+func _on_Area2D_body_entered(body: PhysicalBody2D):
+	entered = true
+	
+
+
+func _on_Area2D_body_exited(body):
+	entered = false

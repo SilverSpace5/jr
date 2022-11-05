@@ -18,11 +18,12 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*res://Scripts/Autoload/Global.gd"
-Server="*res://Scripts/Autoload/Server.gd"
+Network="*res://Scripts/Network.gd"
 SaveLoad="*res://Scripts/Autoload/SaveLoad.gd"
 Console="*res://Instances/Autoload/Console.tscn"
 Players="*res://Instances/Autoload/Players.tscn"
 MenuTheme="*res://Instances/Autoload/menu_theme.tscn"
+Server="*res://Scripts/Autoload/Server.gd"
 
 [debug]
 
@@ -146,9 +147,9 @@ fasterNetwork={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":70,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
-Roll={
+arms={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777218,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 leftClick={
@@ -204,9 +205,9 @@ rightClick={
 "deadzone": 0.5,
 "events": [  ]
 }
-arms={
+Roll={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777218,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 down={
